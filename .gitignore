@@ -4,6 +4,9 @@ schemas/*
 out/*
 node_modules
 
+
+.DS_Store
+
 # Logs
 logs
 *.log
@@ -107,8 +110,4 @@ dist
 .dynamodb/
 
 # TernJS port file
-<<<<<<< HEAD
 .tern-port
-=======
-.tern-port
->>>>>>> 42fbbeb86728578f9d30ecc0619a3af985f0ce06
