@@ -97,7 +97,7 @@ The table_stats.csv file contains the following columns:
 - If it is needed to run the process multiple times, restart the CQL Proxy. 
 - Stats tables are truncated at the beginning of the process.
 - Multiple schema files can be processed in one execution. Place them all in the schemas folder.
-- Parameters can be changed in the consts file.
+- Parameters can be changed in the consts file and in the beginning of the index file.
 
 # Known issues
 
