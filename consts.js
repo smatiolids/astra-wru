@@ -1,5 +1,6 @@
 import { randomBytes } from "crypto";
 import { v4 as uuidv4, v1 as uuidv1 } from "uuid";
+
 //Size in bits
 //https://cassandra.apache.org/doc/latest/cassandra/cql/types.html
 // String length
@@ -8,8 +9,6 @@ export const AVERAGE_SET_LENGTH = 5;
 export const AVERAGE_LIST_LENGTH = 5;
 export const AVERAGE_BLOB_LENGTH = 500;
 
-
-// Sizes in Bytes
 export const dataTypeSizes = {
   ASCII: 8 * AVERAGE_STRING_LENGTH,
   BIGINT: 64,

@@ -142,7 +142,7 @@ async function parseTableAndType(dataTypes, cql) {
     }
   }
 
-  // Bits to Bytes
+  // bits to Bytes
   result.size =
     result.columns.reduce((acc, cur) => {
       acc += cur.size;
