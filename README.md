@@ -91,7 +91,13 @@ The table_stats.csv file contains the following columns:
 - WRU per record: How many WRUs are consumed per one single insert
 - Rows per RRU: How many records fit in one RRU (4kb). This can help understand read requests consumption
 - RRU per N rows: If the application runs select with N records, this would be the RRUs consumed.
- 
+
+## Hints
+
+- If it is needed to run the process twice, restart the CQL Proxy.
+- Multiple schema files can be process in one execution.
+- Some parameters can be adjusted in the consts file.
+
 # Known issues
 
 - Counter Tables fails (These tables do not accept inserts, so update commands need to be implemented)
