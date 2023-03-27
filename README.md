@@ -71,7 +71,7 @@ node index
 ````
 
 
-## Post running
+## Results
 
 - Table info is available in the "out" folder, in the file "table_stats.csv."
 - Logs and errors also available in the "out" folder
@@ -94,8 +94,9 @@ The table_stats.csv file contains the following columns:
 
 ## Hints
 
-- If it is needed to run the process twice, restart the CQL Proxy.
-- Multiple schema files can be process in one execution.
+- If it is needed to run the process multiple times , restart the CQL Proxy. 
+- Stats table are truncated in the beginning of the process.
+- Multiple schema files can be process in one execution. Place them all in the schemas folder.
 - Some parameters can be adjusted in the consts file.
 
 # Known issues
