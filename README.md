@@ -13,7 +13,7 @@ So, in conjunction with the CQL Proxy version that stores the metrics, this app 
 
 The first thing is to run CQL Proxy locally. It needed to use the version from [https://github.com/qzg/cql-proxy], which collects the read and write metrics.
 
-With the app connected to the local CQL Proxy, it will read all the schema files from the "schema" folder.
+The app connected to the local CQL Proxy will read all the schema files from the "schema" folder.
 
 Then, it will create the types and tables for each table.
 
@@ -21,7 +21,7 @@ For each table, the app generates 100 records (this quantity can be changed if n
 
 After finishing all tasks, the CQL Proxy stats are collected into a file with the write sizes in the "out" folder.
 
-Tables and Types are dropped from the database
+Tables and Types are dropped from the database.
 
 # How to use it
 
@@ -71,9 +71,9 @@ node index
 ````
 
 
-## Post running
+## Results
 
-- Table info is available in the "out" folder, in the file "table_stats.csv."
+- Table info is available in the "out" folder, in the "table_stats.csv."
 - Logs and errors also available in the "out" folder
 
 
@@ -89,16 +89,17 @@ The table_stats.csv file contains the following columns:
 - insert_wrus: WRU consumed by the inserts
 - writes_size: Write size, in bytes
 - WRU per record: How many WRUs are consumed per one single insert
-- Rows per RRU: How many records fit in one RRU (4kb). This can help understand read requests consumption
+- Rows per RRU: How many records fit in one RRU (4kb) . This information can help understand read requests consumption
 - RRU per N rows: If the application runs select with N records, this would be the RRUs consumed.
 
 ## Hints
 
-- If it is needed to run the process twice, restart the CQL Proxy.
-- Multiple schema files can be process in one execution.
-- Some parameters can be adjusted in the consts file.
+- If it is needed to run the process multiple times, restart the CQL Proxy. 
+- Stats tables are truncated at the beginning of the process.
+- Multiple schema files can be processed in one execution. Place them all in the schemas folder.
+- Parameters can be changed in the consts file.
 
 # Known issues
 
 - Counter Tables fails (These tables do not accept inserts, so update commands need to be implemented)
-- Columns with UDT are not generated
+- Columns with UDT or advanced data types are not generated
