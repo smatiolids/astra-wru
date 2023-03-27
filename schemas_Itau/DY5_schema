@@ -1,0 +1,2775 @@
+CREATE KEYSPACE "OpsCenter" WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.SimpleStrategy', 'replication_factor': '2' } AND DURABLE_WRITES = true;
+
+CREATE TABLE "OpsCenter".backup_reports (
+    week text,
+    event_time timestamp,
+    backup_id text,
+    type text,
+    destination text,
+    deleted_at timestamp,
+    full_status text,
+    "keyspaces" text,
+    status text,
+    PRIMARY KEY (week, event_time, backup_id, type, destination)
+) WITH CLUSTERING ORDER BY (event_time DESC, backup_id ASC, type ASC, destination ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = '{"version": [6, 7, 8, 17030], "info": "OpsCenter management data."}'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE INDEX backup_reports_by_id ON "OpsCenter".backup_reports (backup_id);
+
+CREATE TABLE "OpsCenter".bestpractice_results (
+    key text,
+    column1 varint,
+    value blob,
+    PRIMARY KEY (key, column1)
+) WITH CLUSTERING ORDER BY (column1 DESC)
+    AND read_repair_chance = 0.25
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = '{"version": [6, 7, 8, 17030], "info": "OpsCenter management data."}'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE "OpsCenter".events (
+    key text,
+    action bigint,
+    api_source_ip text,
+    column_family text,
+    event_source text,
+    "keyspace" text,
+    level bigint,
+    message text,
+    source_node text,
+    success boolean,
+    target_node text,
+    time bigint,
+    user text,
+    PRIMARY KEY (key)
+) WITH read_repair_chance = 0.25
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = '{"version": [6, 7, 8, 17030], "info": "OpsCenter management data."}'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 12, 'min_threshold' : 8 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE "OpsCenter".events_timeline (
+    key text,
+    column1 bigint,
+    value blob,
+    PRIMARY KEY (key, column1)
+) WITH CLUSTERING ORDER BY (column1 ASC)
+    AND read_repair_chance = 0.25
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = '{"version": [6, 7, 8, 17030], "info": "OpsCenter management data."}'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 8, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE "OpsCenter".pdps (
+    key text,
+    column1 text,
+    value blob,
+    PRIMARY KEY (key, column1)
+) WITH CLUSTERING ORDER BY (column1 ASC)
+    AND read_repair_chance = 0.25
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = '{"version": [6, 7, 8, 17030], "info": "OpsCenter management data."}'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE "OpsCenter".rollup_state (
+    node text,
+    name text,
+    res int,
+    avg float,
+    histogram blob,
+    max float,
+    min float,
+    ts timestamp,
+    type int,
+    value float,
+    weight float,
+    PRIMARY KEY (node, name, res)
+) WITH CLUSTERING ORDER BY (name ASC, res ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.1
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = '{"version": [6, 7, 8, 17030], "info": "OpsCenter management data."}'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.LeveledCompactionStrategy' }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE "OpsCenter".rollups300 (
+    key text,
+    timestamp varint,
+    value blob,
+    PRIMARY KEY (key, timestamp)
+) WITH CLUSTERING ORDER BY (timestamp ASC)
+    AND read_repair_chance = 0.25
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = '{"version": [6, 7, 8, 17030], "info": "OpsCenter management data."}'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 16, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE "OpsCenter".rollups60 (
+    key text,
+    timestamp varint,
+    value blob,
+    PRIMARY KEY (key, timestamp)
+) WITH CLUSTERING ORDER BY (timestamp ASC)
+    AND read_repair_chance = 0.25
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = '{"version": [6, 7, 8, 17030], "info": "OpsCenter management data."}'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE "OpsCenter".rollups7200 (
+    key text,
+    timestamp varint,
+    value blob,
+    PRIMARY KEY (key, timestamp)
+) WITH CLUSTERING ORDER BY (timestamp ASC)
+    AND read_repair_chance = 0.25
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = '{"version": [6, 7, 8, 17030], "info": "OpsCenter management data."}'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 8, 'min_threshold' : 2 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE "OpsCenter".rollups86400 (
+    key text,
+    timestamp varint,
+    value blob,
+    PRIMARY KEY (key, timestamp)
+) WITH CLUSTERING ORDER BY (timestamp ASC)
+    AND read_repair_chance = 0.25
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = '{"version": [6, 7, 8, 17030], "info": "OpsCenter management data."}'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 8, 'min_threshold' : 2 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE "OpsCenter".settings (
+    key blob,
+    column1 blob,
+    value blob,
+    PRIMARY KEY (key, column1)
+) WITH CLUSTERING ORDER BY (column1 ASC)
+    AND read_repair_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = '{"version": [6, 7, 8, 17030], "info": "OpsCenter management data."}'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 12, 'min_threshold' : 8 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE KEYSPACE solr_admin WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.EverywhereStrategy' } AND DURABLE_WRITES = true;
+
+CREATE TABLE solr_admin.solr_resources (
+    core_name text,
+    resource_name text,
+    resource_value blob,
+    PRIMARY KEY (core_name, resource_name)
+) WITH CLUSTERING ORDER BY (resource_name ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 7776000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE KEYSPACE dse_insights_local WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.LocalStrategy' } AND DURABLE_WRITES = true;
+
+CREATE TYPE dse_insights_local.insights_filters_rule_type (
+    policy text,
+    pattern text,
+    scope text
+);
+
+CREATE TYPE dse_insights_local.insights_config_type (
+    mode text,
+    upload_url text,
+    upload_interval_in_seconds int,
+    metric_sampling_interval_in_seconds int,
+    data_dir_max_size_in_mb int,
+    proxy_type text,
+    proxy_url text,
+    proxy_authentication text,
+    node_system_info_report_period text,
+    config_refresh_interval_in_seconds int,
+    filtering_rules frozen<set<frozen<dse_insights_local.insights_filters_rule_type>>>
+);
+
+CREATE TABLE dse_insights_local.insights_config (
+    key int,
+    config dse_insights_local.insights_config_type,
+    PRIMARY KEY (key)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'DSE Insights Config'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE KEYSPACE dse_system WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.EverywhereStrategy' } AND DURABLE_WRITES = true;
+
+CREATE TABLE dse_system.encrypted_keys (
+    key_file text,
+    cipher text,
+    strength int,
+    key_id timeuuid,
+    key text,
+    PRIMARY KEY (key_file, cipher, strength, key_id)
+) WITH CLUSTERING ORDER BY (cipher ASC, strength ASC, key_id ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 7776000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE KEYSPACE dy5cas008 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE KEYSPACE dy5cas007 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE dy5cas007.tbdy5528_cslt_agem_deth (
+    cod_idef_agem uuid,
+    cod_cana_dtbc_agem text,
+    cod_cmpl_prod_cont int,
+    cod_empr_cogl_clie text,
+    cod_idef_agem_lgdo text,
+    cod_inca_benf text,
+    cod_moti_reje_oper text,
+    cod_prod_cont_unvl int,
+    cod_situ_agem text,
+    cod_sub_prod_cont int,
+    cod_tipo_empr_cogl_benf text,
+    cod_tipo_empr_cogl_clie text,
+    cod_tipo_oper_agem int,
+    cod_tipo_pess_clie text,
+    dat_agem_oper timestamp,
+    dat_cria_agem_oper timestamp,
+    dat_ulti_atui_agem_oper timestamp,
+    dat_vcto_oper timestamp,
+    des_agem_oper text,
+    des_moti_reje_oper text,
+    nom_benf_oper text,
+    nom_cana_dtbc_agem text,
+    nom_clie_agem text,
+    nom_inca_benf text,
+    nom_situ_agem text,
+    nom_tipo_oper_agem text,
+    num_agen_benf text,
+    num_cdba_oper text,
+    num_cont_benf text,
+    num_cont_clie text,
+    num_docm_benf_oper text,
+    num_docm_clie text,
+    num_dv_cont_benf text,
+    num_dv_cont_clie text,
+    num_idef_agem_oper text,
+    num_linh_dgvl_oper text,
+    num_titu_cont_clie text,
+    num_unid_ated_cogl_clie text,
+    vlr_totl_oper decimal,
+    PRIMARY KEY (cod_idef_agem)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 63115200
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas007.tbdy5529_cslt_agem_deth_lgdo (
+    cod_idef_agem_lgdo text,
+    cod_cana_dtbc_agem text,
+    cod_cmpl_prod_cont int,
+    cod_empr_cogl_clie text,
+    cod_idef_agem uuid,
+    cod_inca_benf text,
+    cod_moti_reje_oper text,
+    cod_prod_cont_unvl int,
+    cod_situ_agem text,
+    cod_sub_prod_cont int,
+    cod_tipo_empr_cogl_benf text,
+    cod_tipo_empr_cogl_clie text,
+    cod_tipo_oper_agem int,
+    cod_tipo_pess_clie text,
+    dat_agem_oper timestamp,
+    dat_cria_agem_oper timestamp,
+    dat_ulti_atui_agem_oper timestamp,
+    dat_vcto_oper timestamp,
+    des_agem_oper text,
+    des_moti_reje_oper text,
+    nom_benf_oper text,
+    nom_cana_dtbc_agem text,
+    nom_clie_agem text,
+    nom_inca_benf text,
+    nom_situ_agem text,
+    nom_tipo_oper_agem text,
+    num_agen_benf text,
+    num_cdba_oper text,
+    num_cont_benf text,
+    num_cont_clie text,
+    num_docm_benf_oper text,
+    num_docm_clie text,
+    num_dv_cont_benf text,
+    num_dv_cont_clie text,
+    num_idef_agem_oper text,
+    num_linh_dgvl_oper text,
+    num_titu_cont_clie text,
+    num_unid_ated_cogl_clie text,
+    vlr_totl_oper decimal,
+    PRIMARY KEY (cod_idef_agem_lgdo)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 63115200
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas007.tbdy5530_cslt_agem_prdo (
+    num_unid_ated_cogl_clie text,
+    num_cont_clie text,
+    num_dv_cont_clie text,
+    dat_agem_oper timestamp,
+    cod_idef_agem uuid,
+    cod_empr_cogl_clie text,
+    cod_idef_agem_lgdo text,
+    cod_inca_benf text,
+    cod_moti_reje_agem text,
+    cod_situ_agem text,
+    cod_tipo_empr_cogl_benf text,
+    cod_tipo_empr_cogl_clie text,
+    cod_tipo_oper_agem int,
+    cod_tipo_pess_clie text,
+    dat_cria_agem_oper timestamp,
+    dat_ulti_atui_agem_oper timestamp,
+    dat_vcto_oper timestamp,
+    des_agem_oper text,
+    des_moti_reje_oper text,
+    nom_benf_oper text,
+    nom_clie_agem text,
+    nom_inca_benf text,
+    nom_situ_agem text,
+    nom_tipo_oper_agem text,
+    num_agen_benf text,
+    num_cont_benf text,
+    num_docm_benf_oper text,
+    num_docm_clie text,
+    num_dv_cont_benf text,
+    vlr_totl_oper decimal,
+    PRIMARY KEY ((num_unid_ated_cogl_clie, num_cont_clie, num_dv_cont_clie), dat_agem_oper, cod_idef_agem)
+) WITH CLUSTERING ORDER BY (dat_agem_oper ASC, cod_idef_agem ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 63115200
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas007.tbdy5531_cslt_agem_prdo_situ (
+    num_unid_ated_cogl_clie text,
+    num_cont_clie text,
+    num_dv_cont_clie text,
+    nom_situ_agem text,
+    dat_agem_oper timestamp,
+    cod_idef_agem uuid,
+    cod_empr_cogl_clie text,
+    cod_idef_agem_lgdo text,
+    cod_inca_benf text,
+    cod_moti_reje_agem text,
+    cod_situ_agem text,
+    cod_tipo_empr_cogl_benf text,
+    cod_tipo_empr_cogl_clie text,
+    cod_tipo_oper_agem int,
+    cod_tipo_pess_clie text,
+    dat_cria_agem_oper timestamp,
+    dat_ulti_atui_agem_oper timestamp,
+    dat_vcto_oper timestamp,
+    des_agem_oper text,
+    des_moti_reje_oper text,
+    nom_benf_oper text,
+    nom_clie_agem text,
+    nom_inca_benf text,
+    nom_tipo_oper_agem text,
+    num_agen_benf text,
+    num_cont_benf text,
+    num_docm_benf_oper text,
+    num_docm_clie text,
+    num_dv_cont_benf text,
+    vlr_totl_oper decimal,
+    PRIMARY KEY ((num_unid_ated_cogl_clie, num_cont_clie, num_dv_cont_clie, nom_situ_agem), dat_agem_oper, cod_idef_agem)
+) WITH CLUSTERING ORDER BY (dat_agem_oper ASC, cod_idef_agem ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 63115200
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE KEYSPACE dy5cas006 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE dy5cas006.tbdy5524_cslt_trsf_deth (
+    cod_idef_trsf uuid,
+    cod_cana_dtbc_trsf text,
+    cod_empr_cogl_orgr text,
+    cod_idef_trsf_lgdo text,
+    cod_idt_spb_favo text,
+    cod_idt_spb_orgr text,
+    cod_inca_favo text,
+    cod_situ_trsf text,
+    cod_tipo_empr_cogl_orgr text,
+    cod_tipo_pess_favo text,
+    cod_tipo_pess_orgr text,
+    dat_devo_trsf timestamp,
+    dat_efet_trsf timestamp,
+    des_trsf text,
+    nom_cana_dtbc_trsf text,
+    nom_favo text,
+    nom_orgr text,
+    nom_situ_trsf text,
+    nom_tipo_trsf text,
+    num_agen_favo text,
+    num_cont_orgr text,
+    num_cont_trsf_favo text,
+    num_docm_favo text,
+    num_docm_orgr text,
+    num_dv_cont_favo text,
+    num_dv_cont_orgr text,
+    num_unid_ated_cogl_orgr text,
+    vlr_totl_trsf decimal,
+    PRIMARY KEY (cod_idef_trsf)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.1
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.LeveledCompactionStrategy' }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 63115200
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas006.tbdy5525_cslt_trsf_deth_lgdo (
+    cod_idef_trsf_lgdo text,
+    cod_cana_dtbc_trsf text,
+    cod_empr_cogl_orgr text,
+    cod_idef_trsf uuid,
+    cod_idt_spb_favo text,
+    cod_idt_spb_orgr text,
+    cod_inca_favo text,
+    cod_situ_trsf text,
+    cod_tipo_empr_cogl_orgr text,
+    cod_tipo_pess_favo text,
+    cod_tipo_pess_orgr text,
+    dat_devo_trsf timestamp,
+    dat_efet_trsf timestamp,
+    des_trsf text,
+    nom_cana_dtbc_trsf text,
+    nom_favo text,
+    nom_orgr text,
+    nom_situ_trsf text,
+    nom_tipo_trsf text,
+    num_agen_favo text,
+    num_cont_orgr text,
+    num_cont_trsf_favo text,
+    num_docm_favo text,
+    num_docm_orgr text,
+    num_dv_cont_favo text,
+    num_dv_cont_orgr text,
+    num_unid_ated_cogl_orgr text,
+    vlr_totl_trsf decimal,
+    PRIMARY KEY (cod_idef_trsf_lgdo)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.1
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.LeveledCompactionStrategy' }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 63115200
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas006.tbdy5526_cslt_trsf_prdo (
+    num_unid_ated_cogl_orgr text,
+    num_cont_orgr text,
+    num_dv_cont_orgr text,
+    dat_efet_trsf timestamp,
+    cod_idef_trsf uuid,
+    cod_empr_cogl_orgr text,
+    cod_situ_trsf text,
+    cod_tipo_empr_cogl_orgr text,
+    cod_tipo_pess_favo text,
+    cod_tipo_pess_orgr text,
+    dat_devo_trsf timestamp,
+    des_trsf text,
+    nom_docm_orgr text,
+    nom_favo text,
+    nom_orgr text,
+    nom_situ_trsf text,
+    nom_tipo_trsf text,
+    num_docm_favo text,
+    vlr_totl_trsf decimal,
+    PRIMARY KEY ((num_unid_ated_cogl_orgr, num_cont_orgr, num_dv_cont_orgr), dat_efet_trsf, cod_idef_trsf)
+) WITH CLUSTERING ORDER BY (dat_efet_trsf ASC, cod_idef_trsf ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.1
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.LeveledCompactionStrategy' }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 63115200
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas006.tbdy5527_cslt_trsf_prdo_situ (
+    num_unid_ated_cogl_orgr text,
+    num_cont_orgr text,
+    num_dv_cont_orgr text,
+    nom_situ_trsf text,
+    dat_efet_trsf timestamp,
+    cod_idef_trsf uuid,
+    cod_empr_cogl_orgr text,
+    cod_situ_trsf text,
+    cod_tipo_empr_cogl_orgr text,
+    cod_tipo_pess_favo text,
+    cod_tipo_pess_orgr text,
+    dat_devo_trsf timestamp,
+    des_trsf text,
+    nom_docm_orgr text,
+    nom_favo text,
+    nom_orgr text,
+    nom_tipo_trsf text,
+    num_docm_favo text,
+    vlr_totl_trsf decimal,
+    PRIMARY KEY ((num_unid_ated_cogl_orgr, num_cont_orgr, num_dv_cont_orgr, nom_situ_trsf), dat_efet_trsf, cod_idef_trsf)
+) WITH CLUSTERING ORDER BY (dat_efet_trsf ASC, cod_idef_trsf ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.1
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.LeveledCompactionStrategy' }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 63115200
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE KEYSPACE dy5cas005 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TYPE dy5cas005.meio_pgto_utzd (
+    cod_tipo_meio_pgto int,
+    nom_tipo_meio_pgto text,
+    num_ccre_pgto text,
+    vlr_pgto decimal
+);
+
+CREATE TABLE dy5cas005.tbdy5533_cod_idef_pgto_lgdo (
+    cod_idef_pgto_lgdo text,
+    cod_aute_cpvt_pgto text,
+    cod_cana_pgto text,
+    cod_cmpl_prod_cont int,
+    cod_crtr_cobr text,
+    cod_empr_cogl_pagd text,
+    cod_idef_cobr text,
+    cod_idef_pgto uuid,
+    cod_inca_benf text,
+    cod_prod_cont_unvl int,
+    cod_situ_pgto text,
+    cod_sub_prod_cont int,
+    cod_tipo_empr_cogl_benf text,
+    cod_tipo_empr_cogl_pagd text,
+    cod_tipo_pess_benf text,
+    cod_tipo_pess_pagd text,
+    dat_canm_pgto timestamp,
+    dat_efet_pgto timestamp,
+    dat_vcto_cobr timestamp,
+    des_pgto text,
+    nom_benf text,
+    nom_cana_pgto text,
+    nom_pagd text,
+    nom_situ_pgto text,
+    num_agen_benf text,
+    num_cdba_cobr text,
+    num_cont_pagd text,
+    num_cont_pgto_benf text,
+    num_docm_benf text,
+    num_docm_pagd text,
+    num_dv_cont_benf text,
+    num_dv_cont_pagd text,
+    num_seqe_titu_cont text,
+    num_unid_ated_cogl_pagd text,
+    txt_meio_pgto_utzd set<frozen<dy5cas005.meio_pgto_utzd>>,
+    vlr_cobr decimal,
+    vlr_totl_pgto decimal,
+    PRIMARY KEY (cod_idef_pgto_lgdo)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 63115200
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas005.tbdy5534_cslt_pgto_deth (
+    cod_idef_pgto uuid,
+    cod_aute_cpvt_pgto text,
+    cod_cana_pgto text,
+    cod_cmpl_prod_cont int,
+    cod_crtr_cobr text,
+    cod_empr_cogl_pagd text,
+    cod_idef_cobr text,
+    cod_idef_pgto_lgdo text,
+    cod_inca_benf text,
+    cod_prod_cont_unvl int,
+    cod_situ_pgto text,
+    cod_sub_prod_cont int,
+    cod_tipo_empr_cogl_benf text,
+    cod_tipo_empr_cogl_pagd text,
+    cod_tipo_pess_benf text,
+    cod_tipo_pess_pagd text,
+    dat_canm_pgto timestamp,
+    dat_efet_pgto timestamp,
+    dat_vcto_cobr timestamp,
+    des_pgto text,
+    nom_benf text,
+    nom_cana_pgto text,
+    nom_pagd text,
+    nom_situ_pgto text,
+    num_agen_benf text,
+    num_cdba_cobr text,
+    num_cont_pagd text,
+    num_cont_pgto_benf text,
+    num_docm_benf text,
+    num_docm_pagd text,
+    num_dv_cont_benf text,
+    num_dv_cont_pagd text,
+    num_seqe_titu_cont text,
+    num_unid_ated_cogl_pagd text,
+    txt_meio_pgto_utzd set<frozen<dy5cas005.meio_pgto_utzd>>,
+    vlr_cobr decimal,
+    vlr_totl_pgto decimal,
+    PRIMARY KEY (cod_idef_pgto)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 63115200
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas005.tbdy5535_cslt_pgto_prdo (
+    num_unid_ated_cogl_pagd text,
+    num_cont_pagd text,
+    num_dv_cont_pagd text,
+    dat_efet_pgto timestamp,
+    cod_idef_pgto uuid,
+    cod_empr_cogl_pagd text,
+    cod_idef_cobr text,
+    cod_idef_pgto_lgdo text,
+    cod_situ_pgto text,
+    cod_tipo_empr_cogl_pagd text,
+    cod_tipo_pess_pagd text,
+    dat_canm_pgto timestamp,
+    dat_vcto_cobr timestamp,
+    des_pgto text,
+    nom_benf text,
+    nom_pagd text,
+    nom_situ_pgto text,
+    num_docm_benf text,
+    num_docm_pagd text,
+    vlr_totl_pgto decimal,
+    PRIMARY KEY ((num_unid_ated_cogl_pagd, num_cont_pagd, num_dv_cont_pagd), dat_efet_pgto, cod_idef_pgto)
+) WITH CLUSTERING ORDER BY (dat_efet_pgto DESC, cod_idef_pgto ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 63115200
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas005.tbdy5536_cslt_pgto_prdo_situ (
+    num_unid_ated_cogl_pagd text,
+    num_cont_pagd text,
+    num_dv_cont_pagd text,
+    nom_situ_pgto text,
+    dat_efet_pgto timestamp,
+    cod_idef_pgto uuid,
+    cod_empr_cogl_pagd text,
+    cod_idef_cobr text,
+    cod_idef_pgto_lgdo text,
+    cod_situ_pgto text,
+    cod_tipo_empr_cogl_pagd text,
+    cod_tipo_pess_pagd text,
+    dat_canm_pgto timestamp,
+    dat_vcto_cobr timestamp,
+    des_pgto text,
+    nom_benf text,
+    nom_pagd text,
+    num_docm_benf text,
+    num_docm_pagd text,
+    vlr_totl_pgto decimal,
+    PRIMARY KEY ((num_unid_ated_cogl_pagd, num_cont_pagd, num_dv_cont_pagd, nom_situ_pgto), dat_efet_pgto, cod_idef_pgto)
+) WITH CLUSTERING ORDER BY (dat_efet_pgto DESC, cod_idef_pgto ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 63115200
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE KEYSPACE system_auth WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE system_auth.role_members (
+    role text,
+    member text,
+    PRIMARY KEY (role, member)
+) WITH CLUSTERING ORDER BY (member ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 7776000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'role memberships lookup table'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE system_auth.role_permissions (
+    role text,
+    resource text,
+    grantables set<text>,
+    permissions set<text>,
+    restricted set<text>,
+    PRIMARY KEY (role, resource)
+) WITH CLUSTERING ORDER BY (resource ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 7776000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'permissions granted to db roles'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE system_auth.roles (
+    role text,
+    can_login boolean,
+    is_superuser boolean,
+    member_of set<text>,
+    salted_hash text,
+    PRIMARY KEY (role)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 7776000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'role definitions'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE KEYSPACE dy5cas004 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE dy5cas004.tbdy5389_insr_pgto (
+    cod_idef_insr uuid,
+    cod_idef_meio_pgto uuid,
+    cod_idef_wllt uuid,
+    dat_hor_cria timestamp,
+    dat_vcto_insr timestamp,
+    ind_vlr_insr_vrvl boolean,
+    vlr_pgto_insr double,
+    PRIMARY KEY (cod_idef_insr)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas004.tbdy5390_tran_pgto (
+    cod_idef_pess_debt uuid,
+    mes_tran_pgto int,
+    cod_idef_tran uuid,
+    dat_cria_tran_pgto timestamp,
+    cod_cpvt_tran uuid,
+    cod_idef_cobr text,
+    cod_idef_insr_cred uuid,
+    nom_cate_meio_pgto_cred text,
+    nom_cate_meio_pgto_debt text,
+    nom_pess_cred text,
+    nom_pess_debt text,
+    nom_situ_tran_pgto text,
+    nom_sub_cate_meio_pgto_cred text,
+    nom_sub_cate_meio_pgto_debt text,
+    num_docm_idef_pess_cred text,
+    txt_ctud_meio_pgto_cred map<text, text>,
+    txt_ctud_meio_pgto_debt map<text, text>,
+    vlr_tran_pgto double,
+    PRIMARY KEY ((cod_idef_pess_debt, mes_tran_pgto), cod_idef_tran, dat_cria_tran_pgto)
+) WITH CLUSTERING ORDER BY (cod_idef_tran ASC, dat_cria_tran_pgto ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas004.tbdy5391_vncl_meio_pgto_wllt (
+    cod_idef_wllt uuid,
+    cod_idef_meio_pgto uuid,
+    nom_cate_meio_pgto text,
+    nom_sub_cate_meio_pgto text,
+    cod_idef_insr_esao uuid,
+    dat_hor_cria timestamp,
+    ind_meio_pgto_dflt_pagr boolean,
+    ind_meio_pgto_dflt_rber boolean,
+    txt_ctud_meio_pgto map<text, text>,
+    PRIMARY KEY (cod_idef_wllt, cod_idef_meio_pgto, nom_cate_meio_pgto, nom_sub_cate_meio_pgto)
+) WITH CLUSTERING ORDER BY (cod_idef_meio_pgto ASC, nom_cate_meio_pgto ASC, nom_sub_cate_meio_pgto ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas004.tbdy5392_wllt (
+    cod_idef_pess uuid,
+    cod_idef_wllt uuid,
+    cod_idef_meio_pgto_dflt_pagr uuid,
+    cod_idef_meio_pgto_dflt_rber uuid,
+    PRIMARY KEY (cod_idef_pess, cod_idef_wllt)
+) WITH CLUSTERING ORDER BY (cod_idef_wllt ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas004.tbdy5406_ctrt_docm_wllt (
+    num_cpf_cnpj text,
+    cod_idef_prod int,
+    cod_idef_wllt text,
+    dat_hor_cria timestamp,
+    nom_idef_prod text,
+    nom_situ_ctrt text,
+    num_agen_cont_pgto_ctrt int,
+    num_cont_pgto_ctrt bigint,
+    num_digt_cont_pgto_ctrt int,
+    num_idef_ctrt text,
+    txt_ctud_detl_ctrt text,
+    PRIMARY KEY (num_cpf_cnpj, cod_idef_prod)
+) WITH CLUSTERING ORDER BY (cod_idef_prod ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas004.tbdy5407_soli_pedi_pgto (
+    num_idef_pedi_pgto text,
+    nom_situ_pedi_pgto text,
+    dat_hor_cria_pedi_pgto timestamp,
+    num_cpf_cnpj text,
+    num_ctrt_asdo text,
+    txt_ctud_pedi_pgto text,
+    PRIMARY KEY (num_idef_pedi_pgto, nom_situ_pedi_pgto)
+) WITH CLUSTERING ORDER BY (nom_situ_pedi_pgto ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE KEYSPACE dy5cas003 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE dy5cas003.tbdy5378_clie_cont (
+    cod_tipo_empr_cogl text,
+    cod_empr_cogl text,
+    num_unid_ated_cogl text,
+    num_cont text,
+    num_dv text,
+    dat_incu_clie timestamp,
+    num_etmu_pgto_clie text,
+    cod_cate_cont_clie text,
+    cod_cmpl_prod_cont int,
+    cod_prod_cont_unvl_clie int,
+    cod_sgto_clie_cont text,
+    cod_sub_prod_cont_clie int,
+    cod_tipo_pess_clie text,
+    hor_incu_clie timestamp,
+    num_cpf_cnpj_clie text,
+    PRIMARY KEY ((cod_tipo_empr_cogl, cod_empr_cogl, num_unid_ated_cogl, num_cont, num_dv), dat_incu_clie, num_etmu_pgto_clie)
+) WITH CLUSTERING ORDER BY (dat_incu_clie ASC, num_etmu_pgto_clie ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas003.tbdy5379_clie_docm (
+    cod_tipo_pess_clie text,
+    num_cpf_cnpj_clie text,
+    dat_incu_clie timestamp,
+    num_etmu_pgto_clie text,
+    cod_cate_cont_clie text,
+    cod_cmpl_prod_cont int,
+    cod_empr_cogl text,
+    cod_prod_cont_unvl_clie int,
+    cod_sgto_clie_cont text,
+    cod_sub_prod_cont_clie int,
+    cod_tipo_empr_cogl text,
+    hor_incu_clie timestamp,
+    num_cont text,
+    num_dv text,
+    num_unid_ated_cogl text,
+    PRIMARY KEY ((cod_tipo_pess_clie, num_cpf_cnpj_clie), dat_incu_clie, num_etmu_pgto_clie)
+) WITH CLUSTERING ORDER BY (dat_incu_clie ASC, num_etmu_pgto_clie ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas003.tbdy5380_clie_etmu_pgto (
+    num_etmu_pgto_clie text,
+    cod_cate_cont_clie text,
+    cod_cmpl_prod_cont int,
+    cod_empr_cogl text,
+    cod_prod_cont_unvl_clie int,
+    cod_sgto_clie_cont text,
+    cod_sub_prod_cont_clie int,
+    cod_tipo_empr_cogl text,
+    cod_tipo_pess_clie text,
+    dat_incu_clie timestamp,
+    hor_incu_clie timestamp,
+    num_cont text,
+    num_cpf_cnpj_clie text,
+    num_dv text,
+    num_unid_ated_cogl text,
+    PRIMARY KEY (num_etmu_pgto_clie)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas003.tbdy5381_mens_divi_plat_pgto (
+    num_divi_plat_pgto text,
+    num_idt_mens text,
+    dat_incu_mens timestamp,
+    hor_incu_mens timestamp,
+    nom_copo_dstn text,
+    nom_copo_orig text,
+    num_etmu_pgto_clie text,
+    num_idt_mens_orig text,
+    txt_ctud_mens text,
+    PRIMARY KEY (num_divi_plat_pgto, num_idt_mens)
+) WITH CLUSTERING ORDER BY (num_idt_mens ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas003.tbdy5382_mens_etmu_pgto (
+    num_etmu_pgto_clie text,
+    num_idt_mens text,
+    dat_incu_mens timestamp,
+    hor_incu_mens timestamp,
+    nom_copo_dstn text,
+    nom_copo_orig text,
+    num_idt_mens_orig text,
+    txt_ctud_mens text,
+    PRIMARY KEY (num_etmu_pgto_clie, num_idt_mens)
+) WITH CLUSTERING ORDER BY (num_idt_mens ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas003.tbdy5383_mens_orig (
+    num_idt_mens_orig text,
+    num_idt_mens text,
+    dat_incu_mens timestamp,
+    hor_incu_mens timestamp,
+    nom_copo_dstn text,
+    nom_copo_orig text,
+    num_etmu_pgto_clie text,
+    txt_ctud_mens text,
+    PRIMARY KEY (num_idt_mens_orig, num_idt_mens)
+) WITH CLUSTERING ORDER BY (num_idt_mens ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas003.tbdy5384_mens_psst (
+    num_idt_mens text,
+    dat_incu_mens timestamp,
+    hor_incu_mens timestamp,
+    nom_copo_dstn text,
+    nom_copo_orig text,
+    num_agru_mens_clie text,
+    num_idt_mens_orig text,
+    txt_ctud_mens text,
+    PRIMARY KEY (num_idt_mens)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE KEYSPACE dy5cas002 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE dy5cas002.tbdy5328_cslt_even_debt_clie (
+    cod_tipo_pess_clie text,
+    num_cpf_cnpj_clie_solt text,
+    cod_situ_debt text,
+    dat_hor_even_debt timestamp,
+    num_unid_ated_cogl_solt text,
+    num_cont_solt text,
+    num_dv_solt text,
+    num_ctrt bigint,
+    num_parc_ctrt int,
+    cod_cate_cont_solt text,
+    cod_chav_ipi text,
+    cod_cmpl_prod_cont_solt text,
+    cod_empr_cogl_cntt text,
+    cod_empr_cogl_solt text,
+    cod_modu_clie_cont_solt text,
+    cod_moti_reto_soli text,
+    cod_prod_cont_unvl_solt text,
+    cod_serv_debt text,
+    cod_sgto_clie_cont_solt text,
+    cod_sub_prod_cont_solt text,
+    cod_tipo_cpsc_sald_soli text,
+    cod_tipo_empr_cogl_cntt text,
+    cod_tipo_empr_cogl_solt text,
+    cod_tipo_oper_finn text,
+    cod_tipo_pess_clie_cntt text,
+    dat_hor_emis_cpvt timestamp,
+    dat_hor_reto_efet_debt timestamp,
+    dat_hor_soli_debt timestamp,
+    ind_deve_sold text,
+    ind_efet_debt_paci text,
+    num_cont_cntt text,
+    num_cpf_cnpj_clie_cntt text,
+    num_divi_plat_pgto uuid,
+    num_dv_cntt text,
+    num_sub_crtr_ctrt text,
+    num_unid_ated_cogl_cntt text,
+    vlr_efev_debt double,
+    vlr_real_debt double,
+    vlr_soli_debt double,
+    PRIMARY KEY ((cod_tipo_pess_clie, num_cpf_cnpj_clie_solt, cod_situ_debt), dat_hor_even_debt, num_unid_ated_cogl_solt, num_cont_solt, num_dv_solt, num_ctrt, num_parc_ctrt)
+) WITH CLUSTERING ORDER BY (dat_hor_even_debt DESC, num_unid_ated_cogl_solt ASC, num_cont_solt ASC, num_dv_solt ASC, num_ctrt ASC, num_parc_ctrt ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas002.tbdy5329_cslt_even_debt_cont (
+    cod_tipo_pess_clie text,
+    num_unid_ated_cogl_solt text,
+    num_cont_solt text,
+    num_dv_solt text,
+    cod_situ_debt text,
+    dat_hor_even_debt timestamp,
+    num_cpf_cnpj_clie_solt text,
+    num_ctrt bigint,
+    num_parc_ctrt int,
+    cod_cate_cont_solt text,
+    cod_chav_ipi text,
+    cod_cmpl_prod_cont_solt text,
+    cod_empr_cogl_cntt text,
+    cod_empr_cogl_solt text,
+    cod_modu_clie_cont_solt text,
+    cod_moti_reto_soli text,
+    cod_prod_cont_unvl_solt text,
+    cod_serv_debt text,
+    cod_sgto_clie_cont_solt text,
+    cod_sub_prod_cont_solt text,
+    cod_tipo_cpsc_sald_soli text,
+    cod_tipo_empr_cogl_cntt text,
+    cod_tipo_empr_cogl_solt text,
+    cod_tipo_oper_finn text,
+    cod_tipo_pess_clie_cntt text,
+    dat_hor_emis_cpvt timestamp,
+    dat_hor_reto_efet_debt timestamp,
+    dat_hor_soli_debt timestamp,
+    ind_deve_sold text,
+    ind_efet_debt_paci text,
+    num_cont_cntt text,
+    num_cpf_cnpj_clie_cntt text,
+    num_divi_plat_pgto uuid,
+    num_dv_cntt text,
+    num_sub_crtr_ctrt text,
+    num_unid_ated_cogl_cntt text,
+    vlr_efev_debt double,
+    vlr_real_debt double,
+    vlr_soli_debt double,
+    PRIMARY KEY ((cod_tipo_pess_clie, num_unid_ated_cogl_solt, num_cont_solt, num_dv_solt, cod_situ_debt), dat_hor_even_debt, num_cpf_cnpj_clie_solt, num_ctrt, num_parc_ctrt)
+) WITH CLUSTERING ORDER BY (dat_hor_even_debt DESC, num_cpf_cnpj_clie_solt ASC, num_ctrt ASC, num_parc_ctrt ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas002.tbdy5330_cslt_even_debt_ctrt (
+    cod_tipo_pess_clie text,
+    num_ctrt bigint,
+    cod_situ_debt text,
+    dat_hor_even_debt timestamp,
+    num_cpf_cnpj_clie_solt text,
+    num_unid_ated_cogl_solt text,
+    num_cont_solt text,
+    num_dv_solt text,
+    num_parc_ctrt int,
+    cod_cate_cont_solt text,
+    cod_chav_ipi text,
+    cod_cmpl_prod_cont_solt text,
+    cod_empr_cogl_cntt text,
+    cod_empr_cogl_solt text,
+    cod_modu_clie_cont_solt text,
+    cod_moti_reto_soli text,
+    cod_prod_cont_unvl_solt text,
+    cod_serv_debt text,
+    cod_sgto_clie_cont_solt text,
+    cod_sub_prod_cont_solt text,
+    cod_tipo_cpsc_sald_soli text,
+    cod_tipo_empr_cogl_cntt text,
+    cod_tipo_empr_cogl_solt text,
+    cod_tipo_oper_finn text,
+    cod_tipo_pess_clie_cntt text,
+    dat_hor_emis_cpvt timestamp,
+    dat_hor_reto_efet_debt timestamp,
+    dat_hor_soli_debt timestamp,
+    ind_deve_sold text,
+    ind_efet_debt_paci text,
+    num_cont_cntt text,
+    num_cpf_cnpj_clie_cntt text,
+    num_divi_plat_pgto uuid,
+    num_dv_cntt text,
+    num_sub_crtr_ctrt text,
+    num_unid_ated_cogl_cntt text,
+    vlr_efev_debt double,
+    vlr_real_debt double,
+    vlr_soli_debt double,
+    PRIMARY KEY ((cod_tipo_pess_clie, num_ctrt, cod_situ_debt), dat_hor_even_debt, num_cpf_cnpj_clie_solt, num_unid_ated_cogl_solt, num_cont_solt, num_dv_solt, num_parc_ctrt)
+) WITH CLUSTERING ORDER BY (dat_hor_even_debt DESC, num_cpf_cnpj_clie_solt ASC, num_unid_ated_cogl_solt ASC, num_cont_solt ASC, num_dv_solt ASC, num_parc_ctrt ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dy5cas002.tbdy5393_oper_debt_auta (
+    agencia text,
+    conta text,
+    dac10 text,
+    tpempres text,
+    codbanco text,
+    dat_oper_debt_auta timestamp,
+    cod_idef_clie_ccsn text,
+    cod_moti_lanc_efet_sist text,
+    dat_envo_arqu_reme timestamp,
+    dat_envo_arqu_reto timestamp,
+    dcempsde text,
+    idempsde text,
+    nom_empr_ccsn text,
+    nom_moti_lanc_efet_sist text,
+    num_arqu_reme text,
+    num_arqu_reto text,
+    vlr_oper_debt_auta double,
+    PRIMARY KEY ((agencia, conta, dac10), tpempres, codbanco, dat_oper_debt_auta)
+) WITH CLUSTERING ORDER BY (tpempres ASC, codbanco ASC, dat_oper_debt_auta DESC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE KEYSPACE system_traces WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE system_traces.events (
+    session_id uuid,
+    event_id timeuuid,
+    activity text,
+    source inet,
+    source_elapsed int,
+    thread text,
+    PRIMARY KEY (session_id, event_id)
+) WITH CLUSTERING ORDER BY (event_id ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'tracing events'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system_traces.sessions (
+    session_id uuid,
+    client inet,
+    command text,
+    coordinator inet,
+    duration int,
+    parameters map<text, text>,
+    request text,
+    started_at timestamp,
+    PRIMARY KEY (session_id)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'tracing sessions'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE KEYSPACE system WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.LocalStrategy' } AND DURABLE_WRITES = true;
+
+CREATE TABLE system."IndexInfo" (
+    table_name text,
+    index_name text,
+    value blob,
+    PRIMARY KEY (table_name, index_name)
+) WITH CLUSTERING ORDER BY (index_name ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'built column indexes'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.available_ranges (
+    keyspace_name text,
+    ranges set<blob>,
+    PRIMARY KEY (keyspace_name)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'available keyspace/ranges during bootstrap/replace that are ready to be served'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.batches (
+    id timeuuid,
+    mutations list<blob>,
+    version int,
+    PRIMARY KEY (id)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'batches awaiting replay'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 2 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.built_views (
+    keyspace_name text,
+    view_name text,
+    status_replicated boolean,
+    PRIMARY KEY (keyspace_name, view_name)
+) WITH CLUSTERING ORDER BY (view_name ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'built views'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.compaction_history (
+    id uuid,
+    bytes_in bigint,
+    bytes_out bigint,
+    columnfamily_name text,
+    compacted_at timestamp,
+    keyspace_name text,
+    rows_merged map<int, bigint>,
+    PRIMARY KEY (id)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'week-long compaction history'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 604800
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.local (
+    key text,
+    bootstrapped text,
+    broadcast_address inet,
+    cluster_name text,
+    cql_version text,
+    data_center text,
+    dse_version text,
+    gossip_generation int,
+    graph boolean,
+    host_id uuid,
+    jmx_port int,
+    listen_address inet,
+    native_protocol_version text,
+    native_transport_address inet,
+    native_transport_port int,
+    native_transport_port_ssl int,
+    partitioner text,
+    rack text,
+    release_version text,
+    rpc_address inet,
+    schema_version uuid,
+    server_id text,
+    storage_port int,
+    storage_port_ssl int,
+    tokens set<text>,
+    truncated_at map<uuid, blob>,
+    workload text,
+    workloads frozen<set<text>>,
+    PRIMARY KEY (key)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'information about the local node'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.paxos (
+    row_key blob,
+    cf_id uuid,
+    in_progress_ballot timeuuid,
+    most_recent_commit blob,
+    most_recent_commit_at timeuuid,
+    most_recent_commit_version int,
+    proposal blob,
+    proposal_ballot timeuuid,
+    proposal_version int,
+    PRIMARY KEY (row_key, cf_id)
+) WITH CLUSTERING ORDER BY (cf_id ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'in-progress paxos proposals'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.LeveledCompactionStrategy' }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.peer_events (
+    peer inet,
+    hints_dropped map<uuid, int>,
+    PRIMARY KEY (peer)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'events related to peers'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.peers (
+    peer inet,
+    data_center text,
+    dse_version text,
+    graph boolean,
+    host_id uuid,
+    jmx_port int,
+    native_transport_address inet,
+    native_transport_port int,
+    native_transport_port_ssl int,
+    preferred_ip inet,
+    rack text,
+    release_version text,
+    rpc_address inet,
+    schema_version uuid,
+    server_id text,
+    storage_port int,
+    storage_port_ssl int,
+    tokens set<text>,
+    workload text,
+    workloads frozen<set<text>>,
+    PRIMARY KEY (peer)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'information about known peers in the cluster'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.prepared_statements (
+    prepared_id blob,
+    logged_keyspace text,
+    query_string text,
+    PRIMARY KEY (prepared_id)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'prepared statements'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.range_xfers (
+    token_bytes blob,
+    requested_at timestamp,
+    PRIMARY KEY (token_bytes)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'ranges requested for transfer'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.repairs (
+    parent_id timeuuid,
+    cfids set<uuid>,
+    coordinator inet,
+    last_update timestamp,
+    participants set<inet>,
+    ranges set<blob>,
+    repaired_at timestamp,
+    started_at timestamp,
+    state int,
+    PRIMARY KEY (parent_id)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'repairs'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.size_estimates (
+    keyspace_name text,
+    table_name text,
+    range_start text,
+    range_end text,
+    mean_partition_size bigint,
+    partitions_count bigint,
+    PRIMARY KEY (keyspace_name, table_name, range_start, range_end)
+) WITH CLUSTERING ORDER BY (table_name ASC, range_start ASC, range_end ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'per-table primary range size estimates'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.sstable_activity (
+    keyspace_name text,
+    columnfamily_name text,
+    generation int,
+    rate_120m double,
+    rate_15m double,
+    PRIMARY KEY ((keyspace_name, columnfamily_name, generation))
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'historic sstable read rates'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.transferred_ranges (
+    operation text,
+    keyspace_name text,
+    peer inet,
+    ranges set<blob>,
+    PRIMARY KEY ((operation, keyspace_name), peer)
+) WITH CLUSTERING ORDER BY (peer ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'record of transferred ranges for streaming operation'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system.view_builds_in_progress (
+    keyspace_name text,
+    view_name text,
+    start_token text,
+    end_token text,
+    keys_built bigint,
+    last_token text,
+    PRIMARY KEY (keyspace_name, view_name, start_token, end_token)
+) WITH CLUSTERING ORDER BY (view_name ASC, start_token ASC, end_token ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'views builds current progress'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE KEYSPACE dse_system_local WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.LocalStrategy' } AND DURABLE_WRITES = true;
+
+CREATE TABLE dse_system_local.solr_resources (
+    core_name text,
+    resource_name text,
+    resource_value blob,
+    PRIMARY KEY (core_name, resource_name)
+) WITH CLUSTERING ORDER BY (resource_name ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 7776000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE KEYSPACE system_distributed WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TYPE system_distributed.nodesync_metrics (
+    data_validated bigint,
+    data_repaired bigint,
+    objects_validated bigint,
+    objects_repaired bigint,
+    repair_data_sent bigint,
+    repair_objects_sent bigint,
+    pages_outcomes frozen<map<text, bigint>>
+);
+
+CREATE TYPE system_distributed.nodesync_validation (
+    started_at timestamp,
+    outcome tinyint,
+    missing_nodes set<inet>
+);
+
+CREATE TABLE system_distributed.nodesync_status (
+    keyspace_name text,
+    table_name text,
+    range_group blob,
+    start_token bigint,
+    end_token bigint,
+    last_successful_validation frozen<system_distributed.nodesync_validation>,
+    last_unsuccessful_validation frozen<system_distributed.nodesync_validation>,
+    locked_by inet,
+    PRIMARY KEY ((keyspace_name, table_name, range_group), start_token, end_token)
+) WITH CLUSTERING ORDER BY (start_token ASC, end_token ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'Tracks NodeSync recent validations'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 2419200
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE system_distributed.nodesync_user_validations (
+    id text,
+    node inet,
+    ended_at timestamp,
+    keyspace_name text static,
+    metrics frozen<system_distributed.nodesync_metrics>,
+    outcomes frozen<map<text, bigint>>,
+    segments_to_validate bigint,
+    segments_validated bigint,
+    started_at timestamp,
+    status text,
+    table_name text static,
+    validated_ranges frozen<set<text>>,
+    PRIMARY KEY (id, node)
+) WITH CLUSTERING ORDER BY (node ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'NodeSync user-triggered validations status'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 86400
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE system_distributed.parent_repair_history (
+    parent_id timeuuid,
+    columnfamily_names set<text>,
+    exception_message text,
+    exception_stacktrace text,
+    finished_at timestamp,
+    keyspace_name text,
+    options map<text, text>,
+    requested_ranges set<text>,
+    started_at timestamp,
+    successful_ranges set<text>,
+    PRIMARY KEY (parent_id)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'Repair history'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.TimeWindowCompactionStrategy', 'compaction_window_size' : 1, 'compaction_window_unit' : 'DAYS', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 2592000
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE system_distributed.repair_history (
+    keyspace_name text,
+    columnfamily_name text,
+    id timeuuid,
+    coordinator inet,
+    exception_message text,
+    exception_stacktrace text,
+    finished_at timestamp,
+    parent_id timeuuid,
+    participants set<inet>,
+    range_begin text,
+    range_end text,
+    started_at timestamp,
+    status text,
+    PRIMARY KEY ((keyspace_name, columnfamily_name), id)
+) WITH CLUSTERING ORDER BY (id ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'Repair history'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.TimeWindowCompactionStrategy', 'compaction_window_size' : 1, 'compaction_window_unit' : 'DAYS', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 2592000
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE system_distributed.view_build_status (
+    keyspace_name text,
+    view_name text,
+    host_id uuid,
+    status text,
+    PRIMARY KEY ((keyspace_name, view_name), host_id)
+) WITH CLUSTERING ORDER BY (host_id ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'Materialized View build status'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE KEYSPACE system_schema WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.LocalStrategy' } AND DURABLE_WRITES = true;
+
+CREATE TABLE system_schema.aggregates (
+    keyspace_name text,
+    aggregate_name text,
+    argument_types frozen<list<text>>,
+    deterministic boolean,
+    final_func text,
+    initcond text,
+    return_type text,
+    state_func text,
+    state_type text,
+    PRIMARY KEY (keyspace_name, aggregate_name, argument_types)
+) WITH CLUSTERING ORDER BY (aggregate_name ASC, argument_types ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 604800
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'user defined aggregate definitions'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system_schema.columns (
+    keyspace_name text,
+    table_name text,
+    column_name text,
+    clustering_order text,
+    column_name_bytes blob,
+    kind text,
+    position int,
+    type text,
+    PRIMARY KEY (keyspace_name, table_name, column_name)
+) WITH CLUSTERING ORDER BY (table_name ASC, column_name ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 604800
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'column definitions'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system_schema.dropped_columns (
+    keyspace_name text,
+    table_name text,
+    column_name text,
+    dropped_time timestamp,
+    kind text,
+    type text,
+    PRIMARY KEY (keyspace_name, table_name, column_name)
+) WITH CLUSTERING ORDER BY (table_name ASC, column_name ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 604800
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'dropped column registry'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system_schema.functions (
+    keyspace_name text,
+    function_name text,
+    argument_types frozen<list<text>>,
+    argument_names frozen<list<text>>,
+    body text,
+    called_on_null_input boolean,
+    deterministic boolean,
+    language text,
+    monotonic boolean,
+    monotonic_on frozen<list<text>>,
+    return_type text,
+    PRIMARY KEY (keyspace_name, function_name, argument_types)
+) WITH CLUSTERING ORDER BY (function_name ASC, argument_types ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 604800
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'user defined function definitions'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system_schema.indexes (
+    keyspace_name text,
+    table_name text,
+    index_name text,
+    kind text,
+    options frozen<map<text, text>>,
+    PRIMARY KEY (keyspace_name, table_name, index_name)
+) WITH CLUSTERING ORDER BY (table_name ASC, index_name ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 604800
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'secondary index definitions'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system_schema."keyspaces" (
+    keyspace_name text,
+    durable_writes boolean,
+    replication frozen<map<text, text>>,
+    PRIMARY KEY (keyspace_name)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 604800
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'keyspace definitions'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system_schema.tables (
+    keyspace_name text,
+    table_name text,
+    bloom_filter_fp_chance double,
+    caching frozen<map<text, text>>,
+    cdc boolean,
+    comment text,
+    compaction frozen<map<text, text>>,
+    compression frozen<map<text, text>>,
+    crc_check_chance double,
+    dclocal_read_repair_chance double,
+    default_time_to_live int,
+    extensions frozen<map<text, blob>>,
+    flags frozen<set<text>>,
+    gc_grace_seconds int,
+    id uuid,
+    max_index_interval int,
+    memtable_flush_period_in_ms int,
+    min_index_interval int,
+    nodesync frozen<map<text, text>>,
+    read_repair_chance double,
+    speculative_retry text,
+    PRIMARY KEY (keyspace_name, table_name)
+) WITH CLUSTERING ORDER BY (table_name ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 604800
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'table definitions'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system_schema.triggers (
+    keyspace_name text,
+    table_name text,
+    trigger_name text,
+    options frozen<map<text, text>>,
+    PRIMARY KEY (keyspace_name, table_name, trigger_name)
+) WITH CLUSTERING ORDER BY (table_name ASC, trigger_name ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 604800
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'trigger definitions'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system_schema.types (
+    keyspace_name text,
+    type_name text,
+    field_names frozen<list<text>>,
+    field_types frozen<list<text>>,
+    PRIMARY KEY (keyspace_name, type_name)
+) WITH CLUSTERING ORDER BY (type_name ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 604800
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'user defined type definitions'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE system_schema.views (
+    keyspace_name text,
+    view_name text,
+    base_table_id uuid,
+    base_table_name text,
+    bloom_filter_fp_chance double,
+    caching frozen<map<text, text>>,
+    cdc boolean,
+    comment text,
+    compaction frozen<map<text, text>>,
+    compression frozen<map<text, text>>,
+    crc_check_chance double,
+    dclocal_read_repair_chance double,
+    default_time_to_live int,
+    extensions frozen<map<text, blob>>,
+    gc_grace_seconds int,
+    id uuid,
+    include_all_columns boolean,
+    max_index_interval int,
+    memtable_flush_period_in_ms int,
+    min_index_interval int,
+    nodesync frozen<map<text, text>>,
+    read_repair_chance double,
+    speculative_retry text,
+    where_clause text,
+    PRIMARY KEY (keyspace_name, view_name)
+) WITH CLUSTERING ORDER BY (view_name ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 604800
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'view definitions'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE KEYSPACE dse_perf WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE dse_perf.node_slow_log (
+    node_ip inet,
+    date timestamp,
+    start_time timeuuid,
+    commands list<text>,
+    duration bigint,
+    parameters map<text, text>,
+    source_ip inet,
+    table_names set<text>,
+    tracing_session_id uuid,
+    username text,
+    PRIMARY KEY ((node_ip, date), start_time)
+) WITH CLUSTERING ORDER BY (start_time DESC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 60
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.TimeWindowCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE KEYSPACE dse_insights WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.EverywhereStrategy' } AND DURABLE_WRITES = true;
+
+CREATE TYPE dse_insights.insights_filters_rule_type (
+    policy text,
+    pattern text,
+    scope text
+);
+
+CREATE TYPE dse_insights.insights_config_type (
+    mode text,
+    upload_url text,
+    upload_interval_in_seconds int,
+    metric_sampling_interval_in_seconds int,
+    data_dir_max_size_in_mb int,
+    proxy_type text,
+    proxy_url text,
+    proxy_authentication text,
+    node_system_info_report_period text,
+    config_refresh_interval_in_seconds int,
+    filtering_rules frozen<set<frozen<dse_insights.insights_filters_rule_type>>>
+);
+
+CREATE TABLE dse_insights.insights_config (
+    key int,
+    config dse_insights.insights_config_type,
+    PRIMARY KEY (key)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'DSE Insights Config'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE dse_insights.tokens (
+    node uuid,
+    bearer_token ascii,
+    last_updated timestamp,
+    max_added_date_seen_by_node timestamp,
+    PRIMARY KEY (node)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 0
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'DSE Insights Tokens'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE KEYSPACE dse_security WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE dse_security.digest_tokens (
+    id blob,
+    "password" blob,
+    PRIMARY KEY (id)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 7776000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'digest_tokens'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE dse_security.role_options (
+    role text,
+    options map<text, text>,
+    PRIMARY KEY (role)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 7776000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'role options'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE TABLE dse_security.spark_security (
+    dc text,
+    shared_secret text,
+    PRIMARY KEY (dc)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 7776000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'Spark security settings'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0;
+
+CREATE KEYSPACE dse_leases WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE dse_leases.leases (
+    name text,
+    dc text,
+    duration_ms int,
+    epoch bigint,
+    holder inet,
+    PRIMARY KEY ((name, dc))
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 1209600
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'DSE Lease coordination'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+
+CREATE TABLE dse_leases.logs (
+    name text,
+    dc text,
+    monitor inet,
+    at timestamp,
+    new_holder inet,
+    old_holder inet,
+    PRIMARY KEY ((name, dc), monitor, at)
+) WITH CLUSTERING ORDER BY (monitor ASC, at ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.0
+    AND gc_grace_seconds = 1209600
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = 'DSE Lease history'
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 3600000;
+

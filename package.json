@@ -1,0 +1,20 @@
+{
+  "name": "nodejs-writer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cassandra-driver": "^4.6.4",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.3",
+    "lodash": "^4.17.21",
+    "uuid": "^9.0.0",
+    "winston": "^3.8.2"
+  }
+}

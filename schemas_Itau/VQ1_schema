@@ -1,0 +1,1232 @@
+CREATE KEYSPACE dk1cas001 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TYPE dk1cas001.list_idprod_expreg (
+    cod_idef_prod_bin text,
+    num_ordn_tril int,
+    txt_expr_regl text,
+    cod_tipo_crto_prod text,
+    nom_tipo_crto_prod text,
+    nom_sgto_prod text
+);
+
+CREATE TABLE dk1cas001.tbdk1004_parm_banr_bin (
+    cod_bin_crto int,
+    cod_esta text,
+    cod_apla_aces_bin int,
+    cod_badr_crto_bin int,
+    cod_emio_plas_bin text,
+    cod_empr_cogl text,
+    cod_oper text,
+    cod_plat_crto text,
+    cod_stat_bin int,
+    cod_tipo_crto text,
+    cod_tipo_pess_bin text,
+    cod_vrne_crto int,
+    dat_ulti_alte timestamp,
+    dat_ulti_autr timestamp,
+    des_tipo_uso text,
+    ind_bin_prod_ppag text,
+    nom_apla_aces_bin text,
+    nom_badr_crto_bin text,
+    nom_empr_cogl text,
+    nom_stat_bin text,
+    nom_tipo_crto text,
+    nom_usua_alte text,
+    nom_usua_autr text,
+    nom_vrne_crto text,
+    txt_list_prod_expr_regl list<frozen<dk1cas001.list_idprod_expreg>>,
+    PRIMARY KEY ((cod_bin_crto, cod_esta))
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+
+CREATE KEYSPACE vq1cas003 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE vq1cas003.tbvq0028_tran_ccre_prdo (
+    num_cpf_titu_cccr text,
+    mes_ano_vcto_tran int,
+    dat_vcto_tran date,
+    num_cccr text,
+    num_cpf_pord_ccre text,
+    cod_hash_ccre text,
+    cod_idef_tran_ccre text,
+    cod_autr_tran text,
+    cod_idef_tran_ccre_oril text,
+    cod_moed_hdge text,
+    cod_moed_orig text,
+    cod_moed_tran text,
+    cod_prod_ccre int,
+    cod_ramo_atii_estb text,
+    cod_tcno_aute_tran text,
+    cod_tipo_tran_ccre text,
+    cod_titr_ccre text,
+    dat_tran_ccre date,
+    des_tran_ccre text,
+    nom_badr_ccre text,
+    nom_pord_ccre text,
+    nom_situ_tran text,
+    num_fina_ccre text,
+    num_rfrc_tran text,
+    qtd_totl_parc int,
+    vlr_encr_parc decimal,
+    vlr_prin_parc decimal,
+    vlr_tran decimal,
+    vlr_tran_moed_orig decimal,
+    vlr_tran_real decimal,
+    vlr_txa_camb decimal,
+    PRIMARY KEY ((num_cpf_titu_cccr, mes_ano_vcto_tran), dat_vcto_tran, num_cccr, num_cpf_pord_ccre, cod_hash_ccre, cod_idef_tran_ccre)
+) WITH CLUSTERING ORDER BY (dat_vcto_tran ASC, num_cccr ASC, num_cpf_pord_ccre ASC, cod_hash_ccre ASC, cod_idef_tran_ccre ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+
+CREATE KEYSPACE vh1cas001 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE vh1cas001.tbvh1016_pgto_crto_cred (
+    num_cpf_cnpj_titu_ccre text,
+    mes_ano_pgto_fatu int,
+    dat_reaz_pgto_ccre date,
+    num_cont_ccre text,
+    cod_hash_ccre text,
+    cod_chav_pgto_ccre text,
+    agencia text,
+    cod_badr_crto text,
+    cod_cana_canm_pgto text,
+    cod_cana_reaz_pgto text,
+    cod_crra_crto_cred text,
+    cod_dat_hor_canm_pgto text,
+    cod_dat_hor_cfmc_pgto text,
+    cod_dat_hor_pgto text,
+    cod_estb_tran text,
+    cod_form_pgto text,
+    cod_modo_entr_pgto text,
+    cod_moed_pgto text,
+    cod_orga_admn_crto int,
+    cod_pais_tran int,
+    cod_ramo_atii int,
+    cod_rspa_sist_pgto text,
+    cod_segm_prod_crto int,
+    cod_situ_pgto text,
+    cod_term_pgto text,
+    cod_tipo_pgto text,
+    codbanco text,
+    conta text,
+    dac10 text,
+    dat_vcto_fatu date,
+    hor_pgto time,
+    num_autr_pgto_ccre text,
+    num_ctrl_inst_finn text,
+    num_digt_fina_crto text,
+    tpempres text,
+    vlr_disi_pre_pago_antr_pgto decimal,
+    vlr_disi_pre_pago_pstr_pgto decimal,
+    vlr_disi_rott_antr_pgto decimal,
+    vlr_disi_rott_pstr_pgto decimal,
+    vlr_limi_cred_rott decimal,
+    vlr_pgto_minm decimal,
+    vlr_pgto_tran decimal,
+    vlr_sald_deve_aber decimal,
+    vlr_sald_deve_fech decimal,
+    PRIMARY KEY ((num_cpf_cnpj_titu_ccre, mes_ano_pgto_fatu), dat_reaz_pgto_ccre, num_cont_ccre, cod_hash_ccre, cod_chav_pgto_ccre)
+) WITH CLUSTERING ORDER BY (dat_reaz_pgto_ccre ASC, num_cont_ccre ASC, cod_hash_ccre ASC, cod_chav_pgto_ccre ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE KEYSPACE vq1cas004 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE vq1cas004.tbvq030_detl_info_ccre (
+    cod_hash_ccre text,
+    cod_badr_ccre text,
+    cod_cana_emis_ccre int,
+    cod_cnfg_ambi_ccre text,
+    cod_funo_crto text,
+    cod_hash_lgdo_ccre text,
+    cod_logo_prod int,
+    cod_orga_ccre int,
+    cod_prod_ccre int,
+    cod_tipo_pess text,
+    cod_tipo_pord_ccre text,
+    cod_tipo_tcno_plas_ccre text,
+    cod_vrne_ccre text,
+    dat_emis_ccre timestamp,
+    dat_expi_ccre timestamp,
+    des_ambi_emis_ccre text,
+    des_locl_entg_ccre text,
+    ind_ccre_virt text,
+    ind_pord_ccre_dfnt_visl text,
+    nom_prod_ccre text,
+    num_cccr text,
+    num_cpf_pord_ccre text,
+    num_cpf_titu_cccr text,
+    num_crto_cred_clie_mscd text,
+    PRIMARY KEY (cod_hash_ccre)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE KEYSPACE vq1cas005 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE vq1cas005.tbvq031_cred_fatu_ccre (
+    num_cccr text,
+    cod_idef_ccre text,
+    cod_fatu_ccre text,
+    num_idt_cred_fatu_ccre text,
+    dat_cred_fatu_ccre timestamp,
+    des_cred_fatu_ccre text,
+    num_cpf_pord_ccre text,
+    vlr_cred_fatu_ccre decimal,
+    PRIMARY KEY ((num_cccr, cod_idef_ccre, cod_fatu_ccre), num_idt_cred_fatu_ccre)
+) WITH CLUSTERING ORDER BY (num_idt_cred_fatu_ccre DESC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 10368000
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vq1cas005.tbvq032_encr_serv_fatu_ccre (
+    num_cccr text,
+    cod_idef_ccre text,
+    cod_fatu_ccre text,
+    num_idt_encr_fatu_ccre text,
+    dat_lanc_encr_fatu_ccre timestamp,
+    des_lanc_encr_fatu_ccre text,
+    num_cpf_pord_ccre text,
+    pct_txa_orig_fatu_ccre decimal,
+    vlr_lanc_encr_fatu_ccre decimal,
+    PRIMARY KEY ((num_cccr, cod_idef_ccre, cod_fatu_ccre), num_idt_encr_fatu_ccre)
+) WITH CLUSTERING ORDER BY (num_idt_encr_fatu_ccre DESC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 10368000
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vq1cas005.tbvq033_fatu_ccre_cpto (
+    num_cccr text,
+    cod_idef_ccre text,
+    cod_fatu_ccre text,
+    cod_cdba_fatu_ccre text,
+    cod_moed_ppag_cccr text,
+    cod_moed_vign_fatu_ccre text,
+    dat_cotc_dola_fatu_ccre timestamp,
+    dat_fecm_fatu_ccre timestamp,
+    dat_fecm_prox_fatu_ccre timestamp,
+    dat_fim_desc_fatu_ccre timestamp,
+    dat_fim_fatu_ccre timestamp,
+    dat_inio_desc_fatu_ccre timestamp,
+    dat_inio_fatu_ccre timestamp,
+    dat_inio_prox_fatu_ccre timestamp,
+    dat_pgto_prgd_fatu_ccre timestamp,
+    dat_sald_ppag_cccr timestamp,
+    dat_ulti_devo_fatu_ccre timestamp,
+    dat_vcto_fatu_ccre timestamp,
+    des_encr_txa_orig_fatu text,
+    des_limi_parl_fatu_ccre text,
+    des_moti_devo_fatu_ccre text,
+    des_url_prod_ccre text,
+    ind_cntc_crto_prgd text,
+    ind_cntc_fatu_digl text,
+    ind_cntc_limi_flxl text,
+    ind_cntc_limi_unic text,
+    ind_debt_auta_fatu_ccre text,
+    ind_finm_iof_parl text,
+    ind_novo_algr_parn_fatu text,
+    nom_admn_prod_ccre text,
+    nom_clie_titu_cccr text,
+    nom_pmro_mes_parl_futu text,
+    nom_prod_ccre text,
+    nom_prod_crto_par_cccr text,
+    nom_prog_itiv_cccr text,
+    nom_qrto_mes_parl_futu text,
+    nom_sgnd_mes_parl_futu text,
+    nom_tcro_mes_parl_futu text,
+    num_agen_ccor_cede text,
+    num_banc_asdo_fatu_ccre int,
+    num_banc_auto_conf_fatu text,
+    num_cont_ccor_cede text,
+    num_cpf_pord_ccre text,
+    num_crto_cred_titu_mscd text,
+    num_crto_par_cccr text,
+    num_idef_banc_gerr_bole text,
+    num_prod_crto_par_cccr int,
+    num_vers_layo_cotc_fatu text,
+    pct_desc_prox_anui_cccr decimal,
+    pct_desc_vign_fatu_ccre decimal,
+    pct_finc_fatu_ccre decimal,
+    pct_finc_parl_juro_fatu_ccre decimal,
+    pct_finm_parn_fatu_ccre decimal,
+    pct_txa_orig_fatu_ccre decimal,
+    qtd_crto_adic_ativ int,
+    qtd_devo_fatu_ccre int,
+    qtd_parc_parn_fatu int,
+    qtd_parc_parn_rott int,
+    vlr_cotc_dola_fatu_ccre decimal,
+    vlr_cred_pgto_fatu_ccre decimal,
+    vlr_cust_anua_cred_pesl decimal,
+    vlr_cust_anua_finm_fatu decimal,
+    vlr_cust_anua_finm_prox_fatu decimal,
+    vlr_cust_anua_parl_juro_fatu decimal,
+    vlr_cust_anua_parn_fatu_ccre decimal,
+    vlr_cust_anua_pgto_cont_auta decimal,
+    vlr_cust_anua_pgto_cont_norl decimal,
+    vlr_cust_anua_saqu_prox_fatu decimal,
+    vlr_cust_mnsl_cred_pesl decimal,
+    vlr_cust_mnsl_finm_fatu decimal,
+    vlr_cust_mnsl_finm_prox_fatu decimal,
+    vlr_cust_mnsl_parl_juro_fatu decimal,
+    vlr_cust_mnsl_parn_fatu_ccre decimal,
+    vlr_cust_mnsl_pgto_cont_auta decimal,
+    vlr_cust_mnsl_pgto_cont_norl decimal,
+    vlr_cust_mnsl_saqu_prox_fatu decimal,
+    vlr_debt_copr_fatu_ccre decimal,
+    vlr_debt_intc_fatu_ccre decimal,
+    vlr_desc_anui_pmro_mes decimal,
+    vlr_desc_anui_sgnd_mes decimal,
+    vlr_encr_txa_orig_fatu decimal,
+    vlr_esch_pgto_prgd_fatu_ccre decimal,
+    vlr_finm_parn_fatu_ccre decimal,
+    vlr_finm_pgto_minm decimal,
+    vlr_imps_finm_fatu_ccre decimal,
+    vlr_imps_parl_juro_fatu_ccre decimal,
+    vlr_imps_parn_fatu_ccre decimal,
+    vlr_imps_pgto_minm_fatu decimal,
+    vlr_juro_finm_fatu_ccre decimal,
+    vlr_limi_cccr_disi decimal,
+    vlr_limi_cred_cccr decimal,
+    vlr_limi_cred_cccr_utzd decimal,
+    vlr_limi_parl_fatu_ccre decimal,
+    vlr_limi_parl_juro_fatu_ccre decimal,
+    vlr_limi_saqu_cccr_disi decimal,
+    vlr_limi_saqu_intc_cccr decimal,
+    vlr_limi_saqu_naci_cccr decimal,
+    vlr_maxi_encr_fatu_ccre decimal,
+    vlr_minm_novo_algr_parn decimal,
+    vlr_mora_fatu_ccre decimal,
+    vlr_mult_fatu_ccre decimal,
+    vlr_paci_lanc_fatu_ccre decimal,
+    vlr_parc_parn_fatu decimal,
+    vlr_parc_parn_rott decimal,
+    vlr_parl_futu_dema_mes decimal,
+    vlr_parl_futu_pmro_mes decimal,
+    vlr_parl_futu_qrto_mes decimal,
+    vlr_parl_futu_sgnd_mes decimal,
+    vlr_parl_futu_tcro_mes decimal,
+    vlr_pgto_minm_fatu_ccre decimal,
+    vlr_pgto_prgd_fatu_ccre decimal,
+    vlr_rems_fatu_ccre_antr decimal,
+    vlr_sald_acum_desc_fatu_ccre decimal,
+    vlr_sald_pont_itiv_cccr decimal,
+    vlr_sald_ppag_cccr decimal,
+    vlr_totl_fatu_ccre decimal,
+    vlr_totl_fatu_ccre_antr decimal,
+    vlr_totl_finc_parl_juro_fatu decimal,
+    vlr_totl_finm_pgto_minm decimal,
+    vlr_totl_gast_ppag_cccr decimal,
+    vlr_totl_lanc_intc_dola_fatu decimal,
+    vlr_totl_lanc_intc_real_fatu decimal,
+    vlr_totl_lanc_naci_fatu_ccre decimal,
+    vlr_totl_parl_juro_fatu_ccre decimal,
+    vlr_totl_parn_fatu_ccre decimal,
+    vlr_totl_pre_datd_dema_fatu decimal,
+    vlr_totl_pre_datd_prox_fatu decimal,
+    vlr_txa_anua_finm_prox_fatu decimal,
+    vlr_txa_anua_parl_juro_fatu decimal,
+    vlr_txa_anua_parn_fatu_ccre decimal,
+    vlr_txa_anua_saqu_prox_fatu decimal,
+    vlr_txa_juro_finm_fatu_ccre decimal,
+    vlr_txa_mnsl_cccr decimal,
+    vlr_txa_mnsl_cccr_auta decimal,
+    vlr_txa_mnsl_finm_prox_fatu decimal,
+    vlr_txa_mnsl_parl_juro_fatu decimal,
+    vlr_txa_mnsl_parn_fatu_ccre decimal,
+    vlr_txa_mnsl_saqu_naci_cccr decimal,
+    vlr_txa_mnsl_saqu_prox_fatu decimal,
+    vlr_txa_mora_fatu_ccre decimal,
+    vlr_txa_mult_fatu_ccre decimal,
+    PRIMARY KEY ((num_cccr, cod_idef_ccre, cod_fatu_ccre))
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 10368000
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vq1cas005.tbvq034_lanc_fatu_ccre (
+    num_cccr text,
+    cod_idef_ccre text,
+    cod_fatu_ccre text,
+    num_idt_lanc_fatu_ccre text,
+    dat_lanc_tran_ccre timestamp,
+    des_lanc_tran_ccre text,
+    des_moed_lanc_intc_tran_ccre text,
+    des_pais_lanc_intc_tran_ccre text,
+    des_tcno_ccre text,
+    des_tipo_lanc_tran_ccre text,
+    ind_tran_ccre_pre_datd text,
+    num_ccre_mscd text,
+    num_cpf_pord_ccre text,
+    num_idef_tipo_lanc_tran_ccre int,
+    vlr_cotc_dola_lanc_intc decimal,
+    vlr_encr_parc_juro_tran_ccre decimal,
+    vlr_lanc_intc_tran_ccre_real decimal,
+    vlr_lanc_tran_ccre decimal,
+    vlr_orig_lanc_intc_tran_ccre decimal,
+    vlr_prin_parc_juro_tran_ccre decimal,
+    PRIMARY KEY ((num_cccr, cod_idef_ccre, cod_fatu_ccre), num_idt_lanc_fatu_ccre)
+) WITH CLUSTERING ORDER BY (num_idt_lanc_fatu_ccre DESC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 10368000
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vq1cas005.tbvq035_pgto_pord_fatu_ccre (
+    num_cccr text,
+    cod_idef_ccre text,
+    cod_fatu_ccre text,
+    num_idt_agru_pgto_pord text,
+    cod_tipo_lanc_pord_fatu text,
+    des_ind_titr_pord_cccr text,
+    nom_pord_ccre text,
+    num_ccre_mscd text,
+    num_cpf_pord_ccre text,
+    vlr_sub_totl_cred_pord_ccre decimal,
+    vlr_sub_totl_debt_pord_ccre decimal,
+    vlr_sub_totl_intc_cred_pord decimal,
+    vlr_sub_totl_intc_imps_pord decimal,
+    vlr_sub_totl_intc_livr_pord decimal,
+    vlr_sub_totl_intc_saqu_pord decimal,
+    vlr_sub_totl_intc_totl_pord decimal,
+    vlr_sub_totl_pord_ccre decimal,
+    vlr_sub_totl_sem_imps_pord decimal,
+    PRIMARY KEY ((num_cccr, cod_idef_ccre, cod_fatu_ccre), num_idt_agru_pgto_pord)
+) WITH CLUSTERING ORDER BY (num_idt_agru_pgto_pord DESC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 10368000
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vq1cas005.tbvq045_cred_fatu_aber_ccre (
+    num_cccr text,
+    cod_idef_ccre text,
+    num_idt_cred_fatu_ccre text,
+    dat_cred_fatu_ccre timestamp,
+    des_cred_fatu_ccre text,
+    num_cpf_pord_ccre bigint,
+    num_idt_pord_ccre int,
+    vlr_cred_fatu_ccre decimal,
+    PRIMARY KEY (num_cccr, cod_idef_ccre, num_idt_cred_fatu_ccre)
+) WITH CLUSTERING ORDER BY (cod_idef_ccre ASC, num_idt_cred_fatu_ccre ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vq1cas005.tbvq046_encr_serv_fatu_aber (
+    num_cccr text,
+    cod_idef_ccre text,
+    num_idt_encr_fatu_ccre text,
+    dat_lanc_encr_fatu_ccre timestamp,
+    des_lanc_encr_fatu_ccre text,
+    num_cpf_pord_ccre bigint,
+    num_idt_pord_ccre int,
+    pct_txa_orig_fatu_ccre decimal,
+    vlr_lanc_encr_fatu_ccre decimal,
+    PRIMARY KEY (num_cccr, cod_idef_ccre, num_idt_encr_fatu_ccre)
+) WITH CLUSTERING ORDER BY (cod_idef_ccre ASC, num_idt_encr_fatu_ccre ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vq1cas005.tbvq047_fatu_aber_ccre_cpto (
+    num_cccr text,
+    cod_idef_ccre text,
+    cod_moed_ppag_cccr text,
+    cod_moed_vign_fatu_ccre text,
+    dat_cotc_dola_fatu_ccre timestamp,
+    dat_fecm_fatu_ccre timestamp,
+    dat_fecm_prox_fatu_ccre timestamp,
+    dat_fim_fatu_ccre timestamp,
+    dat_inio_fatu_ccre timestamp,
+    dat_inio_prox_fatu_ccre timestamp,
+    dat_pgto_prgd_fatu_ccre timestamp,
+    dat_sald_ppag_cccr timestamp,
+    dat_vcto_fatu_ccre timestamp,
+    des_encr_txa_orig_fatu text,
+    des_limi_parl_fatu_ccre text,
+    des_url_prod_ccre text,
+    ind_cntc_crto_prgd text,
+    ind_cntc_fatu_digl text,
+    ind_cntc_limi_flxl text,
+    ind_cntc_limi_unic text,
+    ind_debt_auta_fatu_ccre text,
+    ind_finm_iof_parl text,
+    ind_novo_algr_parn_fatu text,
+    nom_admn_prod_ccre text,
+    nom_clie_titu_cccr text,
+    nom_pmro_mes_parl_futu text,
+    nom_prod_ccre text,
+    nom_prod_crto_par_cccr text,
+    nom_prog_itiv_cccr text,
+    nom_qrto_mes_parl_futu text,
+    nom_sgnd_mes_parl_futu text,
+    nom_tcro_mes_parl_futu text,
+    num_cpf_pord_ccre bigint,
+    num_crto_cred_titu_mscd text,
+    num_crto_par_cccr text,
+    num_idt_pord_ccre int,
+    num_prod_crto_par_cccr int,
+    num_vers_layo_cotc_fatu text,
+    pct_finc_fatu_ccre decimal,
+    pct_finc_parl_juro_fatu_ccre decimal,
+    pct_finm_parn_fatu_ccre decimal,
+    pct_finm_rott_ccre decimal,
+    pct_txa_orig_fatu_ccre decimal,
+    qtd_crto_adic_ativ int,
+    qtd_parc_parn_rott int,
+    vlr_cotc_dola_fatu_ccre decimal,
+    vlr_cred_pgto_fatu_ccre decimal,
+    vlr_cust_anua_cred_pesl decimal,
+    vlr_cust_anua_finm_fatu decimal,
+    vlr_cust_anua_finm_prox_fatu double,
+    vlr_cust_anua_finm_rott int,
+    vlr_cust_anua_parl_juro_fatu decimal,
+    vlr_cust_anua_parn_fatu_ccre decimal,
+    vlr_cust_anua_pgto_cont_auta decimal,
+    vlr_cust_anua_pgto_cont_norl decimal,
+    vlr_cust_anua_saqu_fatu decimal,
+    vlr_cust_anua_saqu_prox_fatu double,
+    vlr_cust_mnsl_cred_pesl decimal,
+    vlr_cust_mnsl_finm_fatu decimal,
+    vlr_cust_mnsl_finm_prox_fatu double,
+    vlr_cust_mnsl_finm_rott int,
+    vlr_cust_mnsl_parl_juro_fatu decimal,
+    vlr_cust_mnsl_parn_fatu_ccre decimal,
+    vlr_cust_mnsl_pgto_cont_auta decimal,
+    vlr_cust_mnsl_pgto_cont_norl decimal,
+    vlr_cust_mnsl_saqu_fatu decimal,
+    vlr_cust_mnsl_saqu_prox_fatu double,
+    vlr_debt_copr_fatu_ccre decimal,
+    vlr_debt_intc_fatu_ccre decimal,
+    vlr_encr_txa_orig_fatu decimal,
+    vlr_esch_pgto_prgd_fatu_ccre decimal,
+    vlr_finm_parn_fatu_ccre decimal,
+    vlr_finm_pgto_minm decimal,
+    vlr_imps_finm_fatu_ccre decimal,
+    vlr_imps_parl_juro_fatu_ccre decimal,
+    vlr_imps_parn_fatu_ccre decimal,
+    vlr_imps_pgto_minm_fatu decimal,
+    vlr_juro_finm_fatu_ccre decimal,
+    vlr_limi_cccr_disi decimal,
+    vlr_limi_cred_cccr decimal,
+    vlr_limi_cred_cccr_utzd decimal,
+    vlr_limi_parl_fatu_ccre decimal,
+    vlr_limi_parl_juro_fatu_ccre decimal,
+    vlr_limi_saqu_cccr_disi decimal,
+    vlr_limi_saqu_intc_cccr decimal,
+    vlr_limi_saqu_naci_cccr decimal,
+    vlr_maxi_encr_fatu_ccre decimal,
+    vlr_minm_novo_algr_parn decimal,
+    vlr_mora_fatu_ccre decimal,
+    vlr_mult_fatu_ccre decimal,
+    vlr_paci_lanc_fatu_ccre decimal,
+    vlr_parc_parn_rott decimal,
+    vlr_parl_futu_dema_mes decimal,
+    vlr_parl_futu_pmro_mes decimal,
+    vlr_parl_futu_qrto_mes decimal,
+    vlr_parl_futu_sgnd_mes decimal,
+    vlr_parl_futu_tcro_mes decimal,
+    vlr_pgto_prgd_fatu_ccre decimal,
+    vlr_rems_fatu_ccre_antr decimal,
+    vlr_sald_pont_itiv_cccr decimal,
+    vlr_sald_ppag_cccr decimal,
+    vlr_totl_encr_serv_fatu_aber decimal,
+    vlr_totl_fatu_ccre decimal,
+    vlr_totl_fatu_ccre_antr decimal,
+    vlr_totl_finc_parl_juro_fatu decimal,
+    vlr_totl_finm_pgto_minm decimal,
+    vlr_totl_gast_ppag_cccr decimal,
+    vlr_totl_lanc_intc_dola_fatu decimal,
+    vlr_totl_lanc_intc_real_fatu decimal,
+    vlr_totl_lanc_naci_fatu_ccre decimal,
+    vlr_totl_parl_futu_ccre decimal,
+    vlr_totl_parl_juro_fatu_ccre decimal,
+    vlr_totl_parn_fatu_ccre decimal,
+    vlr_totl_pre_datd_dema_fatu decimal,
+    vlr_totl_pre_datd_prox_fatu decimal,
+    vlr_txa_anua_finm_fatu decimal,
+    vlr_txa_anua_finm_prox_fatu decimal,
+    vlr_txa_anua_parl_juro_fatu decimal,
+    vlr_txa_anua_parn_fatu_ccre decimal,
+    vlr_txa_anua_saqu_fatu decimal,
+    vlr_txa_anua_saqu_prox_fatu decimal,
+    vlr_txa_juro_finm_fatu_ccre decimal,
+    vlr_txa_mnsl_cccr decimal,
+    vlr_txa_mnsl_cccr_auta decimal,
+    vlr_txa_mnsl_finm_fatu decimal,
+    vlr_txa_mnsl_finm_prox_fatu decimal,
+    vlr_txa_mnsl_parl_juro_fatu decimal,
+    vlr_txa_mnsl_parn_fatu_ccre decimal,
+    vlr_txa_mnsl_saqu_fatu decimal,
+    vlr_txa_mnsl_saqu_naci_cccr decimal,
+    vlr_txa_mnsl_saqu_prox_fatu decimal,
+    vlr_txa_mora_fatu_ccre decimal,
+    vlr_txa_mult_fatu_ccre decimal,
+    PRIMARY KEY (num_cccr, cod_idef_ccre)
+) WITH CLUSTERING ORDER BY (cod_idef_ccre ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vq1cas005.tbvq048_lanc_fatu_aber_ccre (
+    num_cccr text,
+    cod_idef_ccre text,
+    num_idt_tran_fatu_ccre text,
+    cod_idef_ccre_lanc text,
+    dat_lanc_tran_ccre timestamp,
+    des_ind_titr_pord_cccr text,
+    des_lanc_tran_ccre text,
+    des_moed_lanc_intc_tran_ccre text,
+    des_pais_lanc_intc_tran_ccre text,
+    des_tcno_ccre text,
+    des_tipo_lanc_tran_ccre text,
+    nom_pord_ccre text,
+    num_ccre_mscd text,
+    num_cpf_pord_ccre bigint,
+    num_idef_tipo_lanc_tran_ccre int,
+    num_idt_pord_ccre int,
+    vlr_cotc_dola_lanc_intc decimal,
+    vlr_encr_parc_juro_tran_ccre decimal,
+    vlr_lanc_intc_tran_ccre_real decimal,
+    vlr_lanc_tran_ccre decimal,
+    vlr_orig_lanc_intc_tran_ccre decimal,
+    vlr_prin_parc_juro_tran_ccre decimal,
+    PRIMARY KEY (num_cccr, cod_idef_ccre, num_idt_tran_fatu_ccre)
+) WITH CLUSTERING ORDER BY (cod_idef_ccre ASC, num_idt_tran_fatu_ccre ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vq1cas005.tbvq049_pgto_pord_fatu_aber (
+    num_cccr text,
+    cod_idef_ccre text,
+    num_idt_agru_pgto_pord text,
+    des_ind_titr_pord_cccr text,
+    nom_pord_ccre text,
+    num_ccre_mscd text,
+    num_cpf_pord_ccre text,
+    num_idt_pord_ccre int,
+    vlr_sub_totl_cred_intc decimal,
+    vlr_sub_totl_cred_naci decimal,
+    vlr_sub_totl_cred_pord_ccre decimal,
+    vlr_sub_totl_debt_intc decimal,
+    vlr_sub_totl_debt_naci decimal,
+    vlr_sub_totl_debt_pord_ccre decimal,
+    vlr_sub_totl_hdge_cred_dola decimal,
+    vlr_sub_totl_hdge_cred_real decimal,
+    vlr_sub_totl_hdge_debt_dola decimal,
+    vlr_sub_totl_hdge_imps decimal,
+    vlr_sub_totl_hdge_livr decimal,
+    vlr_sub_totl_hdge_saqu_real decimal,
+    vlr_sub_totl_hdge_totl_dola decimal,
+    vlr_sub_totl_hdge_totl_real decimal,
+    vlr_sub_totl_intc_cred_pord decimal,
+    vlr_sub_totl_intc_imps_pord decimal,
+    vlr_sub_totl_intc_livr_pord decimal,
+    vlr_sub_totl_intc_saqu_pord decimal,
+    vlr_sub_totl_intc_totl_pord decimal,
+    vlr_sub_totl_pord_ccre decimal,
+    vlr_sub_totl_pord_intc decimal,
+    vlr_sub_totl_pord_naci decimal,
+    PRIMARY KEY (num_cccr, cod_idef_ccre, num_idt_agru_pgto_pord)
+) WITH CLUSTERING ORDER BY (cod_idef_ccre ASC, num_idt_agru_pgto_pord ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE KEYSPACE vz1cas001 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE vz1cas001.tbvz001_hist_aute_crto (
+    cod_hash_crto text,
+    dat_hor_ulti_copr_nao_psen timestamp,
+    dat_hor_ulti_rcus_supt_frau timestamp,
+    dat_hor_ulti_supt_frau_cncl timestamp,
+    PRIMARY KEY (cod_hash_crto)
+) WITH read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vz1cas001.tbvz1003_autr_crto_cred (
+    num_cpf_cnpj text,
+    mes_ano_lanc int,
+    dat_autr date,
+    num_cont text,
+    cod_hash_crto text,
+    cod_chav_lanc text,
+    cod_adqe text,
+    cod_autr text,
+    cod_badr_crto text,
+    cod_crto_virt text,
+    cod_crtr_digl text,
+    cod_estb text,
+    cod_estd_estb text,
+    cod_meto_capu text,
+    cod_moed_orig text,
+    cod_moed_oril text,
+    cod_moti_rspa_tran text,
+    cod_pais_tran text,
+    cod_pont_vend text,
+    cod_prod text,
+    cod_pstl_tran text,
+    cod_ramo_atii text,
+    cod_stat_lanc text,
+    cod_term_oper text,
+    cod_tipo_autr text,
+    cod_tipo_lanc text,
+    cod_tipo_pess_cont_crto text,
+    cod_tipo_pess_pord_ccre text,
+    cod_tipo_vali text,
+    cod_titr_crto text,
+    cod_tran_intc text,
+    cod_tran_tokn text,
+    dat_hor_sist_orig timestamp,
+    hor_lanc text,
+    nom_cida_estb text,
+    nom_estb_tran text,
+    nom_pord_ccre text,
+    num_cont_chps text,
+    num_crto_mscd text,
+    num_digt_fina_crto text,
+    num_rfrc_tran text,
+    num_unid_ated_cogl text,
+    qtd_parc int,
+    txa_juro decimal,
+    txt_dat_hor_ocor_tran text,
+    vlr_juro decimal,
+    vlr_oril_tran decimal,
+    vlr_tran decimal,
+    vlr_tran_dola decimal,
+    vlr_txa_camb_dola decimal,
+    PRIMARY KEY ((num_cpf_cnpj, mes_ano_lanc), dat_autr, num_cont, cod_hash_crto, cod_chav_lanc)
+) WITH CLUSTERING ORDER BY (dat_autr ASC, num_cont ASC, cod_hash_crto ASC, cod_chav_lanc ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vz1cas001.tbvz1003_autr_crto_cred_teste (
+    num_cpf_cnpj text,
+    mes_ano_lanc int,
+    dat_autr date,
+    num_cont text,
+    cod_hash_crto text,
+    cod_chav_lanc text,
+    cod_adqe text,
+    cod_autr text,
+    cod_badr_crto text,
+    cod_crto_virt text,
+    cod_crtr_digl text,
+    cod_estb text,
+    cod_estd_estb text,
+    cod_meto_capu text,
+    cod_moed_orig text,
+    cod_moed_oril text,
+    cod_moti_rspa_tran text,
+    cod_pais_tran text,
+    cod_pont_vend text,
+    cod_prod text,
+    cod_pstl_tran text,
+    cod_ramo_atii text,
+    cod_stat_lanc text,
+    cod_term_oper text,
+    cod_tipo_autr text,
+    cod_tipo_lanc text,
+    cod_tipo_pess_cont_crto text,
+    cod_tipo_pess_pord_ccre text,
+    cod_tipo_vali text,
+    cod_titr_crto text,
+    cod_tran_intc text,
+    cod_tran_tokn text,
+    dat_hor_sist_orig timestamp,
+    hor_lanc text,
+    nom_cida_estb text,
+    nom_estb_tran text,
+    nom_pord_ccre text,
+    num_cont_chps text,
+    num_crto_mscd text,
+    num_digt_fina_crto text,
+    num_rfrc_tran text,
+    num_unid_ated_cogl text,
+    qtd_parc int,
+    txa_juro decimal,
+    txt_dat_hor_ocor_tran text,
+    vlr_juro decimal,
+    vlr_oril_tran decimal,
+    vlr_tran decimal,
+    vlr_tran_dola decimal,
+    vlr_txa_camb_dola decimal,
+    PRIMARY KEY ((num_cpf_cnpj, mes_ano_lanc), dat_autr, num_cont, cod_hash_crto, cod_chav_lanc)
+) WITH CLUSTERING ORDER BY (dat_autr ASC, num_cont ASC, cod_hash_crto ASC, cod_chav_lanc ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vz1cas001.tbvz1004_autr_crto_cred_ajus (
+    num_cpf_cnpj text,
+    mes_ano_lanc int,
+    dat_autr date,
+    num_cont text,
+    cod_hash_crto text,
+    cod_chav_lanc text,
+    cod_adqe text,
+    cod_autr text,
+    cod_badr_crto text,
+    cod_crto_virt text,
+    cod_crtr_digl text,
+    cod_estb text,
+    cod_estd_estb text,
+    cod_meto_capu text,
+    cod_moed_orig text,
+    cod_moed_oril text,
+    cod_moti_rspa_tran text,
+    cod_pais_tran text,
+    cod_pont_vend text,
+    cod_prod text,
+    cod_pstl_tran text,
+    cod_ramo_atii text,
+    cod_stat_lanc text,
+    cod_term_oper text,
+    cod_tipo_autr text,
+    cod_tipo_lanc text,
+    cod_tipo_pess_cont_crto text,
+    cod_tipo_pess_pord_ccre text,
+    cod_tipo_vali text,
+    cod_titr_crto text,
+    cod_tran_intc text,
+    cod_tran_tokn text,
+    dat_hor_sist_orig timestamp,
+    hor_lanc text,
+    nom_cida_estb text,
+    nom_estb_tran text,
+    nom_pord_ccre text,
+    num_cont_chps text,
+    num_crto_mscd text,
+    num_digt_fina_crto text,
+    num_rfrc_tran text,
+    num_unid_ated_cogl text,
+    qtd_parc int,
+    txa_juro decimal,
+    txt_dat_hor_ocor_tran text,
+    vlr_juro decimal,
+    vlr_oril_tran decimal,
+    vlr_tran decimal,
+    vlr_tran_dola decimal,
+    vlr_txa_camb_dola decimal,
+    PRIMARY KEY ((num_cpf_cnpj, mes_ano_lanc), dat_autr, num_cont, cod_hash_crto, cod_chav_lanc)
+) WITH CLUSTERING ORDER BY (dat_autr ASC, num_cont ASC, cod_hash_crto ASC, cod_chav_lanc ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 32140800
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE KEYSPACE vq1cas001 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE vq1cas001.tbvq023_fatu_rsum_crto (
+    num_cccr bigint,
+    cod_hash_ccre text,
+    cod_idef_fatu int,
+    cod_moda_parn text,
+    cod_rott text,
+    cod_situ_sald_fatu text,
+    cod_titr text,
+    dat_fecm_fatu timestamp,
+    dat_vcto_fatu date,
+    des_stat_pgto_fatu text,
+    ind_debt_auta text,
+    num_pord int,
+    qtd_parc int,
+    qtd_parc_rott int,
+    vlr_parc double,
+    vlr_parc_rott double,
+    vlr_pgto_minm double,
+    vlr_pgto_totl double,
+    vlr_sald_fatu_antr double,
+    vlr_totl_pago double,
+    PRIMARY KEY (num_cccr, cod_hash_ccre, cod_idef_fatu)
+) WITH CLUSTERING ORDER BY (cod_hash_ccre ASC, cod_idef_fatu ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vq1cas001.tbvq1024_forl_rmto_grde_crto (
+    num_cont_crto_cred text,
+    num_crto_cred text,
+    agencia text,
+    cod_badr_crto_cred_novo text,
+    cod_cnfg_crto_cred text,
+    cod_fase_forl_rmto_grde text,
+    cod_logo_crto_cred text,
+    cod_logo_prod_novo text,
+    cod_mens_clie_forl_grde text,
+    cod_moda_prod_crto text,
+    cod_orga_prod_crto_cred text,
+    cod_prod_crto_cred text,
+    cod_prod_crto_novo text,
+    cod_sms_clie_forl_grde text,
+    cod_tabe_prod_novo text,
+    cod_tare_forl_rmto_grde text,
+    cod_tipo_anui_prod_novo text,
+    cod_tipo_aume_limi_crto text,
+    cod_vrne_prod_novo text,
+    codbanco text,
+    conta text,
+    dac10 text,
+    dat_inio_forl_rmto_grde timestamp,
+    dia_vcto_fatu_ccre int,
+    ind_crto_adic text,
+    ind_crto_alto_rend text,
+    ind_envo_mens_forl_rmto text,
+    ind_envo_sms_forl_rmto text,
+    ind_ovrl text,
+    ind_perd_isen_anui_crto text,
+    ind_prog_itiv_crto_novo text,
+    nom_clie_crto_cred text,
+    nom_prod_crto_cred text,
+    nom_prod_crto_novo text,
+    num_cpf_cnpj text,
+    num_funl_cola_cogl text,
+    num_simu_cred_crto bigint,
+    qtd_parc_anui_ccre int,
+    segcli text,
+    tpempres text,
+    vlr_limi_cred_clie_crto decimal,
+    vlr_limi_crto_novo decimal,
+    vlr_limi_pre_apra decimal,
+    vlr_parc_anui_ccre decimal,
+    vlr_pct_desc_anui_crto int,
+    PRIMARY KEY (num_cont_crto_cred, num_crto_cred)
+) WITH CLUSTERING ORDER BY (num_crto_cred ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+CREATE TABLE vq1cas001.tbvq1025_info_adic_forl_grde (
+    num_cont_crto_cred text,
+    num_clie bigint,
+    nom_clie_crto text,
+    vlr_limi_cred decimal,
+    PRIMARY KEY (num_cont_crto_cred, num_clie)
+) WITH CLUSTERING ORDER BY (num_clie ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
+
+
+CREATE KEYSPACE vq1cas002 WITH REPLICATION = { 'class' : 'org.apache.cassandra.locator.NetworkTopologyStrategy', 'CTMM1': '3', 'CTMM2': '3' } AND DURABLE_WRITES = true;
+
+CREATE TABLE vq1cas002.tbvq1027_even_fatu_ccre (
+    num_cpf_titu_cccr text,
+    mes_ano_even_fatu_ccre int,
+    num_cccr text,
+    num_cpf_pord_ccre text,
+    cod_hash_ccre text,
+    cod_even_fatu_ccre text,
+    num_seqe_even_fatu_ccre bigint,
+    dat_even_fatu_ccre date,
+    cod_badr_ccre text,
+    cod_chps_cont_ccre text,
+    cod_cnfg_ambi_crto text,
+    cod_orga_ccre text,
+    cod_prod_ccre text,
+    dat_vcto_fatu_ccre date,
+    des_even_fatu_ccre text,
+    dia_vcto_fatu_ccre_altd int,
+    dia_vcto_fatu_ccre_atul int,
+    nom_badr_crto_cred text,
+    nom_prog_even_gerd text,
+    num_crto_cred_clie_mscd text,
+    num_fina_ccre text,
+    num_seqe_even_fatu_ccre_orig bigint,
+    sig3stm_even_gerd text,
+    vlr_fatu_ccre decimal,
+    PRIMARY KEY ((num_cpf_titu_cccr, mes_ano_even_fatu_ccre), num_cccr, num_cpf_pord_ccre, cod_hash_ccre, cod_even_fatu_ccre, num_seqe_even_fatu_ccre, dat_even_fatu_ccre)
+) WITH CLUSTERING ORDER BY (num_cccr ASC, num_cpf_pord_ccre ASC, cod_hash_ccre ASC, cod_even_fatu_ccre ASC, num_seqe_even_fatu_ccre ASC, dat_even_fatu_ccre ASC)
+    AND read_repair_chance = 0.0
+    AND dclocal_read_repair_chance = 0.1
+    AND gc_grace_seconds = 864000
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }
+    AND comment = ''
+    AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }
+    AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+    AND default_time_to_live = 0
+    AND speculative_retry = '99PERCENTILE'
+    AND min_index_interval = 128
+    AND max_index_interval = 2048
+    AND crc_check_chance = 1.0
+    AND cdc = false
+    AND memtable_flush_period_in_ms = 0
+    AND nodesync = { 'enabled' : 'false' };
