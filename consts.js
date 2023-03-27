@@ -1,7 +1,7 @@
 import { randomBytes } from "crypto";
 import { v4 as uuidv4, v1 as uuidv1 } from "uuid";
 
-// Length to consider while generating records
+// Average length to consider while generating records
 export const AVERAGE_STRING_LENGTH = 25;
 export const AVERAGE_SET_LENGTH = 5;
 export const AVERAGE_LIST_LENGTH = 5;
