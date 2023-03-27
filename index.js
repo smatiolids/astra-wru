@@ -7,13 +7,18 @@ import { createLogger, format, transports } from "winston";
 import { createWriteStream } from "fs";
 import _ from "lodash";
 
-const ks = "app";
-const DROP_TABLES = false;
-const CREATE_TABLES = false;
-const WRITE_RECORDS = false;
-const CLEAR_STATS = false;
+dotenv.config();
+
+const ks = process.env.ASTRA_KEYSPACE;
+
+/**
+ * Astra WRU Parameters
+ */
+const DROP_TABLES = true;
+const CREATE_TABLES = true;
+const WRITE_RECORDS = true;
+const CLEAR_STATS = true;
 const NUM_RECORDS = 100;
-const DC = "sa-east-1";
 const RRU_SIZE = 4000;
 const ROWS_PER_READ = 10;
 
@@ -23,10 +28,6 @@ const logger = createLogger({
   defaultMeta: { service: "user-service" },
   format: format.combine(format.timestamp(), format.json()),
   transports: [
-    //
-    // - Write all logs with importance level of `error` or less to `error.log`
-    // - Write all logs with importance level of `info` or less to `combined.log`
-    //
     new transports.Console(),
     new transports.File({
       filename: "./out/error.log",
@@ -36,7 +37,7 @@ const logger = createLogger({
   ],
 });
 
-dotenv.config();
+
 
 async function processSchemaFile(client, file) {
   logger.info(`Starting reading ${file}`);
@@ -86,7 +87,6 @@ async function processSchemaFile(client, file) {
               { consistency: types.consistencies.localQuorum }
             );
             total += recs.length;
-            // await sleep(1000);
           } catch (error) {
             logger.error(error);
             break;
@@ -142,9 +142,12 @@ function sleep(ms) {
 }
 
 async function readSchemas(e) {
+  /**
+   * Connect to the CQL Proxy locally
+   */
   const client = new Client({
-    contactPoints: ["127.0.0.1"],
-    localDataCenter: DC,
+    contactPoints: [process.env.ASTRA_PROXY_IP],
+    localDataCenter: process.env.ASTRA_DC,
     keyspace: ks,
     credentials: {
       username: process.env.ASTRA_CLIENT_ID,
@@ -152,20 +155,11 @@ async function readSchemas(e) {
     },
   });
 
-  // const client = new Client({
-  //   cloud: {
-  //     secureConnectBundle: "../secure-connect-astra-aws-sp.zip",
-  //   },
-  //   credentials: {
-  //     username: process.env.ASTRA_CLIENT_ID,
-  //     password: process.env.ASTRA_CLIENT_SECRET,
-  //   },
-  // });
-
   await client.connect();
   logger.info(`Connected`);
 
   if (DROP_TABLES) {
+    // Drop all tables from the app keyspace
     await dropTables(client);
   }
 
@@ -232,6 +226,9 @@ async function generateResults(client) {
 }
 
 async function dropTables(client) {
+  /**
+   * Drop Tables, then types
+   */
   var rs = await client.execute(
     `select keyspace_name, table_name from system_schema.tables where keyspace_name = '${ks}'`
   );

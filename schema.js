@@ -83,7 +83,7 @@ async function parseTableAndType(dataTypes, cql) {
 
   result.colDefinition = result.colDefinition.replace(
     new RegExp(`${result.keyspace}.`, "gm"),
-    `app.${result.keyspace}_`
+    `${process.env.ASTRA_KEYSPACE}.${result.keyspace}_`
   );
 
   // console.log(result);
