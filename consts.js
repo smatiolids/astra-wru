@@ -1,43 +1,46 @@
 import { randomBytes } from "crypto";
+import pkg from 'lodash';
+const { random } = pkg;
 import { v4 as uuidv4, v1 as uuidv1 } from "uuid";
 
-// Average length to consider while generating records
-export const AVERAGE_STRING_LENGTH = 25;
-export const AVERAGE_SET_LENGTH = 5;
-export const AVERAGE_LIST_LENGTH = 5;
-export const AVERAGE_BLOB_LENGTH = 500;
+// Min and Max length to consider while generating records
+// For the schema calculation, the max length is considered
+export const AVERAGE_STRING_LENGTH = [5, 40];
+export const AVERAGE_SET_LENGTH = [1, 10];
+export const AVERAGE_LIST_LENGTH = [1, 10];
+export const AVERAGE_BLOB_LENGTH = [200, 1000];
 
 
-//Size in bits
+//Size in bytes
 //https://cassandra.apache.org/doc/latest/cassandra/cql/types.html
 export const dataTypeSizes = {
-  ASCII: 8 * AVERAGE_STRING_LENGTH,
-  BIGINT: 64,
-  BLOB: 8 * AVERAGE_BLOB_LENGTH,
+  ASCII: AVERAGE_STRING_LENGTH[1],
+  BIGINT: 8,
+  BLOB: AVERAGE_BLOB_LENGTH[1],
   BOOLEAN: 1,
-  COUNTER: 64,
-  DATE: 32,
-  DECIMAL: 32,
-  DOUBLE: 64,
-  DURATION: 32,
-  FLOAT: 32,
-  INET: 8 * 16,
-  INT: 32,
-  SMALLINT: 16,
-  TEXT: 8 * AVERAGE_STRING_LENGTH,
-  TIME: 64,
-  TIMESTAMP: 64,
-  TIMEUUID: 128,
-  TINYINT: 8,
-  UUID: 128,
-  VARCHAR: 8 * AVERAGE_STRING_LENGTH,
-  VARINT: 32,
+  COUNTER: 8,
+  DATE: 8,
+  DECIMAL: 8,
+  DOUBLE: 8,
+  DURATION: 4,
+  FLOAT: 4,
+  INET: 16,
+  INT: 4,
+  SMALLINT: 2,
+  TEXT: AVERAGE_STRING_LENGTH[1],
+  TIME: 8,
+  TIMESTAMP: 8,
+  TIMEUUID: 16,
+  TINYINT: 1,
+  UUID: 16,
+  VARCHAR: AVERAGE_STRING_LENGTH[1],
+  VARINT: 8,
 };
 
 export const dataTypeGenerator = {
   ASCII: (col) =>
     `'${randomBytes(
-      col.startsWith("COD_") ? 10 : AVERAGE_STRING_LENGTH / 2
+      col.startsWith("COD_") ? 10 : random(AVERAGE_STRING_LENGTH[0], AVERAGE_STRING_LENGTH[1]) / 2
     ).toString("hex")}'`,
   BIGINT: (col) => parseInt(Math.random() * 1000000000000000),
   BLOB: (col) => `textAsBlob('${randomBytes(AVERAGE_BLOB_LENGTH).toString("hex")}')`,
@@ -53,7 +56,7 @@ export const dataTypeGenerator = {
   SMALLINT: (col) => parseInt(Math.random() * 8),
   TEXT: (col) =>
     `'${randomBytes(
-      col.startsWith("COD_") ? 10 : AVERAGE_STRING_LENGTH / 2
+      col.startsWith("COD_") ? 10 : random(AVERAGE_STRING_LENGTH[0], AVERAGE_STRING_LENGTH[1]) / 2
     ).toString("hex")}'`,
   TIME: (col) => `'${new Date().toISOString().substring(11, 23)}'`,
   TIMESTAMP: (col) => `'${new Date().toISOString()}'`,
@@ -62,7 +65,7 @@ export const dataTypeGenerator = {
   UUID: (col) => `${uuidv4()}`,
   VARCHAR: (col) =>
     `'${randomBytes(
-      col.startsWith("COD_") ? 10 : AVERAGE_STRING_LENGTH / 2
+      col.startsWith("COD_") ? 10 : random(AVERAGE_STRING_LENGTH[0], AVERAGE_STRING_LENGTH[1]) / 2
     ).toString("hex")}'`,
   VARINT: (col) => parseInt(Math.random() * 1000),
 };

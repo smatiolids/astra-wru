@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "type": "module",
+  "exports":null,
   "scripts": {
-    "start": "node index.js",
+    "start": "node index.js process",
+    "proxy": "node index.js process",
+    "metrics": "node index.js metrics",
     "schema": "node schema.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

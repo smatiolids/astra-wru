@@ -39,7 +39,7 @@ async function parseObject(cql) {
     str = str.replace(obj.objtype, "").trim().toUpperCase();
     obj.keyspace = str.split(".")[0];
     obj.name = str.split(".")[1] ? str.split(".")[1] : null;
-    console.log(obj);
+    // console.log(obj);
     return obj;
   } catch (error) {
     return null;
@@ -55,7 +55,7 @@ async function parseTableAndType(dataTypes, cql) {
     .replace(/(<.*?>)/g, function (match) {
       return match.replace(/ /g, "");
     });
-  //   console.log(cql.slice(cql.indexOf("("), cql.indexOf(" AND ")));
+
   var items = str.split(" ");
   const result = {
     objtype: items[1],
@@ -86,8 +86,6 @@ async function parseTableAndType(dataTypes, cql) {
     `${process.env.ASTRA_KEYSPACE}.${result.keyspace}_`
   );
 
-  // console.log(result);
-
   let block = "COL";
   for (let ix = 4; ix < items.length; ix++) {
     let item = items[ix];
@@ -97,11 +95,24 @@ async function parseTableAndType(dataTypes, cql) {
     if (item === "PRIMARY") block = "PK";
     if (item === "CLUSTERING") block = "CK";
 
+    if (block === "PK") {
+      // console.log("pk item", item)
+      let col = item.replace(/\(|\)/g, "")
+      let cix = result.columns.findIndex(e => e.name === col)
+      if (cix >= 0)
+        result.columns[cix].isPrimaryKey = true
+
+    }
+
+
     if (block === "COL") {
       if (colType.some((dt) => item.startsWith(dt))) {
         result.columns[result.columns.length - 1].definition = item;
 
-        if (item.includes("COUNTER")) result.isCounter = true;
+        if (item.includes("COUNTER")) {
+          result.isCounter = true;
+          result.columns[result.columns.length - 1].isCounter = true
+        }
 
         colTypeSpecial.forEach((e) => {
           if (item.includes(`${e}<`)) {
@@ -130,24 +141,24 @@ async function parseTableAndType(dataTypes, cql) {
 
         if (result.columns[result.columns.length - 1].isSet)
           result.columns[result.columns.length - 1].size =
-            result.columns[result.columns.length - 1].size * AVERAGE_SET_LENGTH;
+            result.columns[result.columns.length - 1].size * AVERAGE_SET_LENGTH[1];
 
         if (result.columns[result.columns.length - 1].isList)
           result.columns[result.columns.length - 1].size =
             result.columns[result.columns.length - 1].size *
-            AVERAGE_LIST_LENGTH;
+            AVERAGE_LIST_LENGTH[1];
       } else if ([")"].indexOf(item) < 0) {
         result.columns.push({ name: item });
       }
     }
   }
 
-  // bits to Bytes
+  // Summarizes the metrics for the table
   result.size =
     result.columns.reduce((acc, cur) => {
       acc += cur.size;
       return acc;
-    }, 0) / 8;
+    }, 0);
 
   result.WRUPerIRec = Math.ceil(result.size / 1000);
   result.rowsPerWRU = Math.trunc(1000 / result.size);
@@ -206,20 +217,18 @@ async function readSchemas(write = false) {
   }
 
   if (write) {
-    const file = await fs.createWriteStream(process.cwd() + "/out/tables.csv");
+    const file = await fs.createWriteStream(process.cwd() + "/out/table_stats_from_schema.csv");
     file.on("error", function (err) {
       /* error handling */
     });
     file.write(
       `objtype,keyspace,name,size,WRUPerRec,rowsPerWRU,rowsPerRRU,rowsSizeWarning,columns` +
-        "\n"
+      "\n"
     );
     await tables.forEach(async (e) => {
       file.write(
-        `${e.objtype},${e.keyspace},${e.name},${e.size || ""},${
-          e.WRUPerIRec || ""
-        },${e.rowsPerWRU || ""},${e.rowsPerRRU || ""},${
-          e.rowsSizeWarning || ""
+        `${e.objtype},${e.keyspace},${e.name},${e.size || ""},${e.WRUPerIRec || ""
+        },${e.rowsPerWRU || ""},${e.rowsPerRRU || ""},${e.rowsSizeWarning || ""
         },${e.columns ? e.columns.length : ""}` + "\n"
       );
     });
@@ -227,6 +236,11 @@ async function readSchemas(write = false) {
   } else {
     // console.log(tables);
   }
+
+  // console.log(tables.find(e => e.name === 'TBSD9001_CADA_ROTR_JORN_CLIE'));
+  // console.log(tables.find(e => e.name === 'TBSD9001_CADA_ROTR_JORN_CLIE').columns.find(e => e.name === 'TXT_ASSC_PRVD_INTL_ARTL'));
+  // console.log(tables.find(e => e.name === 'TPSD9_TIPO_ASSC_PRVD_INTL_ARTL'));
+
 }
 
 readSchemas(true);
