@@ -9,6 +9,7 @@
     "start": "node index.js process",
     "proxy": "node index.js process",
     "metrics": "node index.js metrics",
+    "usage": "node usage.js /Users/samuel.matioli/work/customers/itau/2023/AVI_PROD_CLUSTER_EM4-diagnostics-2023_02_03_14_19_56_UTC",
     "schema": "node schema.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

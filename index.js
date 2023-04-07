@@ -19,8 +19,8 @@ const DROP_TABLES = true;
 const CREATE_TABLES = true;
 const WRITE_RECORDS = true;
 const CLEAR_STATS = true;
-const NUM_RECORDS = 100; // Records to insert
 const RRU_SIZE = 4000;
+const NUM_RECORDS = 100; // Records to insert
 const SELECT_LIMIT = 20; // Records to select
 
 const logger = createLogger({

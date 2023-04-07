@@ -127,6 +127,7 @@ export const keyspacesToIgnore = [
   "HiveMetaStore",
   "dsefs",
   "DSE_ANALYTICS",
+  "dse_analytics",
   "scylla_manager"
 ];
 

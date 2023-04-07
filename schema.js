@@ -237,10 +237,6 @@ async function readSchemas(write = false) {
     // console.log(tables);
   }
 
-  // console.log(tables.find(e => e.name === 'TBSD9001_CADA_ROTR_JORN_CLIE'));
-  // console.log(tables.find(e => e.name === 'TBSD9001_CADA_ROTR_JORN_CLIE').columns.find(e => e.name === 'TXT_ASSC_PRVD_INTL_ARTL'));
-  // console.log(tables.find(e => e.name === 'TPSD9_TIPO_ASSC_PRVD_INTL_ARTL'));
-
 }
 
 readSchemas(true);
