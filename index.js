@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { Client, types } from "cassandra-driver";
 import { processSchema } from "./schema.js";
-import { AstraUsageTables, dataTypeGenerator } from "./consts.js";
+import { AstraUsageTables, generateValue } from "./consts.js";
 import { readdir } from "fs/promises";
 import { createLogger, format, transports } from "winston";
 import { createWriteStream } from "fs";
@@ -15,13 +15,14 @@ const ks = process.env.ASTRA_KEYSPACE;
 /**
  * Astra WRU Parameters
  */
-const DROP_TABLES = true;
+const DROP_TABLES = false;
 const CREATE_TABLES = true;
 const WRITE_RECORDS = true;
 const CLEAR_STATS = true;
 const NUM_RECORDS = 100; // Records to insert
 const RRU_SIZE = 4000;
 const SELECT_LIMIT = 20; // Records to select
+const TABLES_TO_TEST = ['TBSD9005_DEFI_LIST_ATII_ROTR', 'RESPOSTA', 'SESSION', 'TBSD9007_CNFG_ATII_ROTR_JORN']
 
 const logger = createLogger({
   level: "info",
@@ -34,6 +35,10 @@ const logger = createLogger({
       filename: "./out/error.log",
       level: "error",
     }),
+    new transports.File({
+      filename: "./out/warning.log",
+      level: "warn",
+    }),
     new transports.File({ filename: "./out/combined.log" }),
   ],
 });
@@ -45,6 +50,8 @@ async function processSchemaFile(client, file) {
 
   // Extract tables from schema file
   const tables = await processSchema(file);
+
+  // console.log(tables.find(e => e.name === 'TPSD9_TIPO_RSPA_USUA'))
 
   if (CREATE_TABLES) {
     const errors = [];
@@ -78,14 +85,17 @@ async function processSchemaFile(client, file) {
     // insert records to the table
     const tabs = tables;
     var total = 0;
+    const udts = tables.filter(e => e.objtype === 'TYPE')
 
     // For each table, generates random records and insert them into the table.
     for (let i = 0; i < tabs.length; i++) {
       const tab = tabs[i];
+
+      if (TABLES_TO_TEST.length > 0 && !TABLES_TO_TEST.includes(tab.name)) continue
       if (tab.objtype === "TABLE") {
         logger.info(`==============================================`);
         logger.info(`Inserting into: ${ks}.${tab.keyspace}_${tab.name}`);
-        const recs = tab.isCounter ? await generateUpdateRecords(tab, NUM_RECORDS) : await generateRecords(tab, NUM_RECORDS);
+        const recs = tab.isCounter ? await generateUpdateRecords(tab, NUM_RECORDS, udts) : await generateRecords(tab, NUM_RECORDS, udts);
         for (let i = 0; i < recs.length; i++) {
           try {
             const rs = await client.execute(
@@ -131,19 +141,18 @@ async function processSchemaFile(client, file) {
   }
 }
 
-async function generateRecords(tab, recsToGenerate) {
+async function generateRecords(tab, recsToGenerate, udts) {
   const recs = [];
   for (let i = 0; i < recsToGenerate; i++) {
     const rec = { cols: [], data: [] };
     for (let j = 0; j < tab.columns.length; j++) {
       const col = tab.columns[j];
-      if (dataTypeGenerator[col.colType]) {
-        try {
-          rec.cols.push(col.name);
-          rec.data.push(dataTypeGenerator[col.colType](col.name));
-        } catch (error) {
-          logger.error(error);
-        }
+      try {
+        rec.data.push(await generateValue(col.name, col.definition, udts));
+        rec.cols.push(col.name);
+      } catch (error) {
+        // if was not possible to generate a value for the field, ignore it and move on
+        logger.warn(error.message)
       }
     }
     recs.push(
@@ -155,24 +164,21 @@ async function generateRecords(tab, recsToGenerate) {
   return recs;
 }
 
-async function generateUpdateRecords(tab, recsToGenerate) {
+async function generateUpdateRecords(tab, recsToGenerate, udts) {
   const recs = [];
   for (let i = 0; i < recsToGenerate; i++) {
     const rec = { cols: [], where: [] };
     for (let j = 0; j < tab.columns.length; j++) {
       const col = tab.columns[j];
-
-      if (dataTypeGenerator[col.colType]) {
-        try {
-          if (col.isPrimaryKey) {
-            rec.where.push(`${col.name} = ${dataTypeGenerator[col.colType](col.name)}`)
-          } else if (col.isCounter) {
-            rec.cols.push(`${col.name} = ${col.name} + ${dataTypeGenerator[col.colType](col.name)}`)
-          }
-
-        } catch (error) {
-          logger.error(error);
+      try {
+        if (col.isPrimaryKey) {
+          rec.where.push(`${col.name} = ${await generateValue(col.name, col.definition, udts)}`)
+        } else if (col.isCounter) {
+          rec.cols.push(`${col.name} = ${col.name} + ${await generateValue(col.name, col.definition, udts)}`)
         }
+      } catch (error) {
+        // if was not possible to generate a value for the field, ignore it and move on
+        logger.warn(error.message);
       }
     }
     recs.push(
@@ -277,8 +283,8 @@ async function generateResults(client) {
         .substr(0, e.table_ref.indexOf("_"))
         .replace(`${ks}.`, "")},` +
       `${e.table_ref.substr(e.table_ref.indexOf("_") + 1)},` +
-      `${max([e.insert_count, e.update_count])},`+
-      `${e.writes_size},`+
+      `${max([e.insert_count, e.update_count])},` +
+      `${e.writes_size},` +
       `${e.wrus},` +
       `${e.wrus / max([e.insert_count, e.update_count])},` +
       `${e.select_rrus / e.select_count},` +

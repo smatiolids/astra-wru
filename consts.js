@@ -1,6 +1,6 @@
 import { randomBytes } from "crypto";
-import pkg from 'lodash';
-const { random } = pkg;
+import lodash from 'lodash';
+const { random, isString, uniq } = lodash;
 import { v4 as uuidv4, v1 as uuidv1 } from "uuid";
 
 // Min and Max length to consider while generating records
@@ -37,6 +37,7 @@ export const dataTypeSizes = {
   VARINT: 8,
 };
 
+
 export const dataTypeGenerator = {
   ASCII: (col) =>
     `'${randomBytes(
@@ -69,6 +70,65 @@ export const dataTypeGenerator = {
     ).toString("hex")}'`,
   VARINT: (col) => parseInt(Math.random() * 1000),
 };
+
+export async function generateValue(name, type, udts) {
+  const first = type.indexOf('<')
+  if (first > 0) {
+    const advType = type.substr(0, first)
+    const innerType = type.substring(first + 1, type.length - 1)
+
+    if (advType === 'MAP') {
+      const elems = innerType.split(",").map(e => e.trim())
+      const len = random(AVERAGE_SET_LENGTH[0], AVERAGE_SET_LENGTH[1])
+      let res = []
+      for (let i = 0; i < len; i++) {
+        let k = await generateValue(name, elems[0], udts)
+        let v = await generateValue(name, elems[1], udts)
+        // if (isString(k)) k = k.replace(/'/g, "")
+        // if (isString(v)) v = v.replace(/'/g, "")
+        res.push(`${k} : ${v} `)
+      }
+
+      // return JSON.stringify(res).replace(/"/gm, "'")
+      return `{ ${res.join(" , ")}} `
+    }
+    else if (advType === 'SET' || advType === 'LIST') {
+      const len = random(AVERAGE_SET_LENGTH[0], AVERAGE_SET_LENGTH[1])
+      const res = []
+      for (let i = 0; i < len; i++) {
+        let v = await generateValue(name, innerType, udts)
+        res.push(v)
+      }
+      return advType === 'SET' ? `{ ${uniq(res).join(',')} }` : `[ ${res.join(',')} ]`
+    }
+    else if (advType === 'TUPLE') {
+      const res = await await Promise.all(innerType.split(',').map(async e => await generateValue(name, e.trim(), udts)))
+      return `( ${res.join(',')} )`
+    }
+    else return await generateValue(name, innerType, udts)
+  } else if (dataTypeGenerator[type]) {
+    return dataTypeGenerator[type](name)
+  } else {
+    return await generateValueUDT(name, type, udts)
+  }
+
+  throw new Error(`Invalid type: ${type}`)
+}
+
+async function generateValueUDT(name, type, udts) {
+  const udt = udts.find(e => type === `${e.keyspace}.${e.name}`.toUpperCase())
+  if (udt) {
+    const res = []
+    for (const col of udt.columns) {
+      const v = await generateValue(col.name, col.definition, udts)
+      res.push(`${col.name} : ${v} `)
+    }
+    return `{ ${res.join(" , ")}} `
+  }
+
+  throw new Error(`User defined type not found: ${type}`)
+}
+
 export const colTypeCollection = ["LIST", "SET", "MAP", "TUPLE"];
 
 export const colTypeSpecial = [
