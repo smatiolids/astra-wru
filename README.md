@@ -118,5 +118,4 @@ The table_stats.csv file contains the following columns:
 
 # Known issues
 
-- Columns with UDT or advanced data types are not generated
 - Understand the impact of SAI in the write size
