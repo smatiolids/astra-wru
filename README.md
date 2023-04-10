@@ -75,7 +75,7 @@ npm run schema
 - To run the estimates based on the cql-proxy metrics, run:
 
 ````
-npm run start
+npm run proxy
 
 ````
 
