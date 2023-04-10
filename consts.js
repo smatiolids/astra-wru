@@ -6,8 +6,8 @@ import { v4 as uuidv4, v1 as uuidv1 } from "uuid";
 // Min and Max length to consider while generating records
 // For the schema calculation, the max length is considered
 export const AVERAGE_STRING_LENGTH = [5, 40];
-export const AVERAGE_SET_LENGTH = [1, 10];
-export const AVERAGE_LIST_LENGTH = [1, 10];
+export const AVERAGE_SET_LENGTH = [1, 5];
+export const AVERAGE_LIST_LENGTH = [1, 5];
 export const AVERAGE_BLOB_LENGTH = [200, 1000];
 
 
@@ -44,7 +44,7 @@ export const dataTypeGenerator = {
       col.startsWith("COD_") ? 10 : random(AVERAGE_STRING_LENGTH[0], AVERAGE_STRING_LENGTH[1]) / 2
     ).toString("hex")}'`,
   BIGINT: (col) => parseInt(Math.random() * 1000000000000000),
-  BLOB: (col) => `textAsBlob('${randomBytes(AVERAGE_BLOB_LENGTH).toString("hex")}')`,
+  BLOB: (col) => `textAsBlob('${randomBytes(random(AVERAGE_BLOB_LENGTH[0], AVERAGE_BLOB_LENGTH[1])).toString("hex")}')`,
   BOOLEAN: (col) => Math.random() > 0.5,
   COUNTER: (col) => parseInt(Math.random() * 1000000000000000),
   DATE: (col) => `'${new Date().toISOString().substring(0, 10)}'`,
@@ -109,6 +109,7 @@ export async function generateValue(name, type, udts) {
   } else if (dataTypeGenerator[type]) {
     return dataTypeGenerator[type](name)
   } else {
+    // console.log("DT:", name, type)
     return await generateValueUDT(name, type, udts)
   }
 

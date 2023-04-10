@@ -15,14 +15,14 @@ const ks = process.env.ASTRA_KEYSPACE;
 /**
  * Astra WRU Parameters
  */
-const DROP_TABLES = false;
+const DROP_TABLES = true;
 const CREATE_TABLES = true;
 const WRITE_RECORDS = true;
 const CLEAR_STATS = true;
 const NUM_RECORDS = 100; // Records to insert
 const RRU_SIZE = 4000;
 const SELECT_LIMIT = 20; // Records to select
-const TABLES_TO_TEST = ['TBSD9005_DEFI_LIST_ATII_ROTR', 'RESPOSTA', 'SESSION', 'TBSD9007_CNFG_ATII_ROTR_JORN']
+const TABLES_TO_TEST = []
 
 const logger = createLogger({
   level: "info",
@@ -50,8 +50,6 @@ async function processSchemaFile(client, file) {
 
   // Extract tables from schema file
   const tables = await processSchema(file);
-
-  // console.log(tables.find(e => e.name === 'TPSD9_TIPO_RSPA_USUA'))
 
   if (CREATE_TABLES) {
     const errors = [];
@@ -92,6 +90,7 @@ async function processSchemaFile(client, file) {
       const tab = tabs[i];
 
       if (TABLES_TO_TEST.length > 0 && !TABLES_TO_TEST.includes(tab.name)) continue
+
       if (tab.objtype === "TABLE") {
         logger.info(`==============================================`);
         logger.info(`Inserting into: ${ks}.${tab.keyspace}_${tab.name}`);
@@ -118,15 +117,22 @@ async function processSchemaFile(client, file) {
         );
 
         if (SELECT_LIMIT > 0) {
-          const rs = await client.execute(
-            await generateSelectRecords(tab),
-            {},
-            { consistency: types.consistencies.localQuorum }
-          );
-          tabs[i].rowLengthFromSelect = rs.rowLength
-          logger.info(
-            `Read: ${ks}.${tab.keyspace}_${tab.name} | CQL Sample: ${recs[0]}`
-          );
+          try {
+            const select =  await generateSelectRecords(tab)
+            const rs = await client.execute(
+              select,
+              {},
+              { consistency: types.consistencies.localQuorum }
+            );
+            tabs[i].rowLengthFromSelect = rs.rowLength
+            logger.info(
+              `Read: ${ks}.${tab.keyspace}_${tab.name} | CQL Sample: ${select}`
+            );
+              
+          } catch (error) {
+            logger.error(`SELECT failed: ${tab.name} `)
+            logger.error(error)
+          }
 
         }
       }

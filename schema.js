@@ -87,6 +87,8 @@ async function parseTableAndType(dataTypes, cql) {
   );
 
   let block = "COL";
+  let col = {}
+
   for (let ix = 4; ix < items.length; ix++) {
     let item = items[ix];
 
@@ -106,17 +108,19 @@ async function parseTableAndType(dataTypes, cql) {
 
 
     if (block === "COL") {
-      if (colType.some((dt) => item.startsWith(dt))) {
-        result.columns[result.columns.length - 1].definition = item;
+
+      if (col.name && colType.some((dt) => item === dt || item.startsWith(dt.concat('<')))) {
+
+        col.definition = item;
 
         if (item.includes("COUNTER")) {
           result.isCounter = true;
-          result.columns[result.columns.length - 1].isCounter = true
+          col.isCounter = true
         }
 
         colTypeSpecial.forEach((e) => {
           if (item.includes(`${e}<`)) {
-            result.columns[result.columns.length - 1][
+            col[
               `is${e.charAt(0) + e.slice(1).toLowerCase()}`
             ] = true;
 
@@ -127,28 +131,31 @@ async function parseTableAndType(dataTypes, cql) {
         item = item.replace(/(<|>)/g, "");
         item = item.replace("FROZEN", "");
 
-        result.columns[result.columns.length - 1].colType = item;
-        result.columns[result.columns.length - 1].size = 0;
-        result.columns[result.columns.length - 1].colTypes = item
+        col.colType = item;
+        col.size = 0;
+        col.colTypes = item
           .split(",")
           .map((e) => {
-            result.columns[result.columns.length - 1].size += dataTypes[e];
+            col.size += dataTypes[e];
             return {
               t: e,
               size: dataTypes[e],
             };
           });
 
-        if (result.columns[result.columns.length - 1].isSet)
-          result.columns[result.columns.length - 1].size =
-            result.columns[result.columns.length - 1].size * AVERAGE_SET_LENGTH[1];
+        if (col.isSet)
+          col.size =
+            col.size * AVERAGE_SET_LENGTH[1];
 
-        if (result.columns[result.columns.length - 1].isList)
-          result.columns[result.columns.length - 1].size =
-            result.columns[result.columns.length - 1].size *
+        if (col.isList)
+          col.size =
+            col.size *
             AVERAGE_LIST_LENGTH[1];
+
+        result.columns.push(col);
+        col = {}
       } else if ([")"].indexOf(item) < 0) {
-        result.columns.push({ name: item });
+        col.name = item
       }
     }
   }
@@ -233,14 +240,7 @@ async function readSchemas(write = false) {
       );
     });
     file.end();
-  } else {
-    // console.log(tables);
   }
-
-  // console.log(tables.find(e => e.name === 'TBSD9001_CADA_ROTR_JORN_CLIE'));
-  // console.log(tables.find(e => e.name === 'TBSD9001_CADA_ROTR_JORN_CLIE').columns.find(e => e.name === 'TXT_ASSC_PRVD_INTL_ARTL'));
-  // console.log(tables.find(e => e.name === 'TPSD9_TIPO_ASSC_PRVD_INTL_ARTL'));
-
 }
 
 readSchemas(true);
