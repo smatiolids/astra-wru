@@ -85,6 +85,27 @@ npm run proxy
 npm run metrics
 
 ````
+## Settings:
+
+Environment Variables:
+- ASTRA_CLIENT_ID
+- ASTRA_CLIENT_SECRET
+- ASTRA_CLIENT_TOKEN
+- ASTRA_KEYSPACE = Keyspace to use for object creation
+- ASTRA_DC = Astra region
+- ASTRA_BUNDLE_LOCATION = Astra SCB file location
+
+Consts.js (To randomize the length of values)
+
+- AVERAGE_STRING_LENGTH[n,n]: String length min and max length
+- AVERAGE_SET_LENGTH[n,n]: Arrays 7 Sets  min and max length
+- AVERAGE_LIST_LENGTH[n,n]: Lists min and max length
+- AVERAGE_BLOB_LENGTH[n,n]: Blob min and max size
+
+Index.js
+- NUM_RECORDS: Number of records to write to the tables
+- SELECT_LIMIT: Number of records to select:
+- TABLES_TO_TEST: When defined, run the estimates for this objects only.
 
 ## Results
 
@@ -116,6 +137,8 @@ The table_stats.csv file contains the following columns:
 - Multiple schema files can be processed in one execution. Place them all in the schemas folder.
 - Parameters can be changed in the consts file and in the beginning of the index file.
 
-# Known issues
+# Next Steps
 
 - Understand the impact of SAI in the write size
+- Process diagnostic tarball to extract the metrics
+- Infer write and read count when we don't have the diagnostic files.
