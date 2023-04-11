@@ -4,6 +4,25 @@ NodeJS app to generate writes to tables based on the schema. With this process, 
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
+<!-- code_chunk_output -->
+
+- [Astra WRU](#astra-wru)
+- [Motivation](#motivation)
+- [How it works](#how-it-works)
+- [How to use it](#how-to-use-it)
+  - [Pre-requisites](#pre-requisites)
+  - [Setting environment variables](#setting-environment-variables)
+  - [Starting the CQL Proxy](#starting-the-cql-proxy)
+  - [Installing dependencies](#installing-dependencies)
+  - [Running the app](#running-the-app)
+  - [Settings:](#settings)
+  - [Results](#results)
+  - [Results file:](#results-file)
+  - [Hints](#hints)
+- [Next Steps](#next-steps)
+
+<!-- /code_chunk_output -->
+
 
 # Motivation
 
@@ -21,7 +40,7 @@ The first thing is to run CQL Proxy locally. It needed to use the version from [
 
 The app connected to the local CQL Proxy will read all the schema files from the "schema" folder.
 
-Then, it will create the types and tables for each table.
+Then, it will create the types and tables for each schema file.
 
 For each table, the app generates 100 records (this quantity can be changed if needed).
 
@@ -145,6 +164,7 @@ The table_stats.csv file contains the following columns:
 
 # Next Steps
 
+- Improve the schema mode (With a more accurate formula, the schema estimate will be faster and easier to run)
 - Understand the impact of SAI in the write size
 - Process diagnostic tarball to extract the metrics
 - Infer write and read count when we don't have the diagnostic files.
