@@ -1,6 +1,10 @@
 # Astra WRU
 NodeJS app to generate writes to tables based on the schema. With this process, the request write sizes for each table can be checked.
 
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+
 # Motivation
 
 The right write size of the Cassandra workloads is complex to discover. Depending on the case, this lack of this information can cause the estimates to be underestimated.
@@ -10,6 +14,8 @@ In cases where it is needed to migrate a big cluster to Astra, doing this analys
 So, in conjunction with the CQL Proxy version that stores the metrics, this app will generate a simulated workload based on schema files to understand the behavior for each table.
 
 # How it works
+
+![alt text](misc/how-it-works.png "How it Works")
 
 The first thing is to run CQL Proxy locally. It needed to use the version from [https://github.com/qzg/cql-proxy], which collects the read and write metrics.
 
@@ -25,7 +31,7 @@ Tables and Types are dropped from the database.
 
 # How to use it
 
-## Pre requisites
+## Pre-requisites
 
 - An Astra Database and Keyspace specifically for this process. (WARNING: Tables and types are created and dropped all the time, so choose an empty database to use)
 - Golang (to build the CQL Proxy)
