@@ -14,10 +14,10 @@ NodeJS app to generate writes to tables based on the schema. With this process, 
   - [Setting environment variables](#setting-environment-variables)
   - [Starting the CQL Proxy](#starting-the-cql-proxy)
   - [Installing dependencies](#installing-dependencies)
+  - [Settings](#settings)
   - [Running the app](#running-the-app)
-  - [Settings:](#settings)
   - [Results](#results)
-  - [Results file:](#results-file)
+    - [table_stats_from_cql_proxy](#table_stats_from_cql_proxy)
   - [Hints](#hints)
 - [Next Steps](#next-steps)
 
